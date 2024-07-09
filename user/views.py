@@ -16,6 +16,8 @@ import jwt
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.conf import settings
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class UserListCreateAPIView(APIView):
@@ -25,6 +27,13 @@ class UserListCreateAPIView(APIView):
     #     serializer=UserSerializer(users)
     #     return Response({"data":serializer.data})
     permission_classes=[AllowAny,]
+    @swagger_auto_schema(
+        request_body=UserSerializer,
+        responses={
+            201: openapi.Response('User created successfully', UserTokenSerializer),
+            400: 'Invalid input'
+        }
+    )
     def post(self,request):
 
         user_serializer = UserSerializer(data=request.data)
@@ -44,59 +53,88 @@ class UserListCreateAPIView(APIView):
 
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def login_with_password(request: Request) -> Response:
-    username = request.data['username']
-    password = request.data['password']
-    if not username or not password:
-        raise ValidationError(detail='contact number and password is required', code=status.HTTP_400_BAD_REQUEST)
-    try:
-        x=str(username)
-        y=x[0]+x[1]+x[2]
-       
-        if(y=='+88'):
-            usernamea=x
-            usernameb=x[3:14]
-            if(Users.objects.filter(username=usernamea).exists()):
-                user = Users.objects.get(username__exact=usernamea)
-                #print('+88')
-            elif(Users.objects.filter(username=usernameb).exists()):
-                user = Users.objects.get(username__exact=usernameb)
-                #print('013',user)
-            else:
-                raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
-        else:
-            usernamea=x
-            usernameb='+88'+x
-            if(Users.objects.filter(username=usernamea).exists()):
-                user = Users.objects.get(username__exact=usernamea)
-            elif(Users.objects.filter(username=usernameb).exists()):
-                user = Users.objects.get(username__exact=usernameb)
-            else:
-                raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
-        
-        if not user.check_password(raw_password=password):
-            raise ValidationError(detail='invalid password',code=status.HTTP_400_BAD_REQUEST)
-        if not user.is_active:
-            raise ValidationError(detail='inactive account',code=status.HTTP_403_FORBIDDEN)
-        access_token, refresh_token = create_tokens(user=user)
-        data = {
-            'access_token': access_token,
-            'refresh_token': refresh_token,
+class login_with_password(APIView):
+    permission_classes=(AllowAny,)
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username or contact number of the user'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password of the user'),
+            },
+            required=['username', 'password']
+        ),
+        responses={
+            201: openapi.Response('Login successful', UserTokenSerializer),
+            400: 'Invalid input',
+            403: 'Inactive account',
+            404: "User Doesn't exist"
         }
-        set_cache(key=f'{user}_token_data', value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
-        return Response(data=data, status=status.HTTP_201_CREATED)
-    except Users.DoesNotExist:
-        raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
+    )
+    def post(self,request):
+        username = request.data['username']
+        password = request.data['password']
+        if not username or not password:
+            raise ValidationError(detail='contact number and password is required', code=status.HTTP_400_BAD_REQUEST)
+        try:
+            x=str(username)
+            y=x[0]+x[1]+x[2]
+       
+            if(y=='+88'):
+                usernamea=x
+                usernameb=x[3:14]
+                if(Users.objects.filter(username=usernamea).exists()):
+                    user = Users.objects.get(username__exact=usernamea)
+                #print('+88')
+                elif(Users.objects.filter(username=usernameb).exists()):
+                    user = Users.objects.get(username__exact=usernameb)
+                #print('013',user)
+                else:
+                    raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
+            else:
+                usernamea=x
+                usernameb='+88'+x
+                if(Users.objects.filter(username=usernamea).exists()):
+                    user = Users.objects.get(username__exact=usernamea)
+                elif(Users.objects.filter(username=usernameb).exists()):
+                    user = Users.objects.get(username__exact=usernameb)
+                else:
+                    raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
+        
+            if not user.check_password(raw_password=password):
+                raise ValidationError(detail='invalid password',code=status.HTTP_400_BAD_REQUEST)
+            if not user.is_active:
+                raise ValidationError(detail='inactive account',code=status.HTTP_403_FORBIDDEN)
+            access_token, refresh_token = create_tokens(user=user)
+            data = {
+                'access_token': access_token,
+                'refresh_token': refresh_token,
+            }
+            set_cache(key=f'{user}_token_data', value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
+            return Response(data=data, status=status.HTTP_201_CREATED)
+        except Users.DoesNotExist:
+            raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def logout(request: Request) -> Response:
-    username = request.user.username
-    delete_cache(f'{username}_token_data')
-    return Response({"message": "Successfully logged out"})
+
+class logout(APIView):
+    permission_classes=(IsAuthenticated,)
+
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response('Successfully logged out', openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'message': openapi.Schema(type=openapi.TYPE_STRING, description='Success message')
+                }
+            )),
+        }
+    )
+    def post(self,request):
+        username = request.user.username
+        delete_cache(f'{username}_token_data')
+        return Response({"message": "Successfully logged out"})
 
 
 # class LogoutView(APIView):
@@ -106,31 +144,53 @@ def logout(request: Request) -> Response:
 #         request.user.auth_token.delete()
 #         return Response({'message': 'Successfully logged out.'})
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def refreshed_token(request: Request) -> Response:
-    refreshed_token = request.data.get('refresh_token')
-    try:
-        payload = jwt.decode(jwt=refreshed_token, key=settings.SECRET_KEY, algorithms='HS256', verify=True)
-        if payload['token_type'] != 'refresh':
-            return JsonResponse(data={
-                'message': 'no refresh token provided',
-                'success': False
-            }, status=400)
-        user_name = payload.get('username')
-        user_obj = get_object_or_404(Users, username=user_name)
-        delete_cache(f'{user_obj.username}_token_data')
-        if not user_obj.is_active:
-            raise ValidationError(detail='user is not active', code=status.HTTP_401_UNAUTHORIZED)
-        access_token, refresh_token = create_tokens(user=user_obj)
-        data = {
-            'access_token': access_token,
-            'refresh_token': refresh_token,
+
+class refreshed_token(APIView) :
+    permission_classes=(AllowAny,)
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh token of the user'),
+            },
+            required=['refresh_token']
+        ),
+        responses={
+            201: openapi.Response('Token refreshed successfully', openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'access_token': openapi.Schema(type=openapi.TYPE_STRING, description='New access token'),
+                    'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='New refresh token'),
+                }
+            )),
+            400: 'No refresh token provided',
+            401: 'User is not active or token is invalid'
         }
-        set_cache(key=f'{user_obj.username}_token_data', value=json.dumps(UserTokenSerializer(user_obj).data), ttl=5*60*60)
-        return Response(data=data, status=status.HTTP_201_CREATED)
-    except Exception as err:
-        return JsonResponse(data={
-            'message': f'{str(err)}',
-            'success': False,
-        }, status=401)
+    )
+    def post(self,request):
+        refreshed_token = request.data.get('refresh_token')
+        try:
+            payload = jwt.decode(jwt=refreshed_token, key=settings.SECRET_KEY, algorithms='HS256', verify=True)
+            if payload['token_type'] != 'refresh':
+                return JsonResponse(data={
+                    'message': 'no refresh token provided',
+                    'success': False
+                }, status=400)
+            user_name = payload.get('username')
+            user_obj = get_object_or_404(Users, username=user_name)
+            delete_cache(f'{user_obj.username}_token_data')
+            if not user_obj.is_active:
+                raise ValidationError(detail='user is not active', code=status.HTTP_401_UNAUTHORIZED)
+            access_token, refresh_token = create_tokens(user=user_obj)
+            data = {
+                'access_token': access_token,
+                'refresh_token': refresh_token,
+            }
+            set_cache(key=f'{user_obj.username}_token_data', value=json.dumps(UserTokenSerializer(user_obj).data), ttl=5*60*60)
+            return Response(data=data, status=status.HTTP_201_CREATED)
+        except Exception as err:
+            return JsonResponse(data={
+                'message': f'{str(err)}',
+                'success': False,
+            }, status=401)
