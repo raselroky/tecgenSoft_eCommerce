@@ -22,3 +22,19 @@ class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model=Brand
         fields='__all__'
+
+
+
+class AllCategoryChildSerializer(serializers.ModelSerializer):
+    sub_category=serializers.SerializerMethodField()
+    brand=serializers.SerializerMethodField()
+
+    def get_sub_category(self,obj):
+        subcategory=SubCategory.objects.all()
+        return SubCategorySerializer(subcategory,many=True).data
+    def get_brand(self,obj):
+        brand=Brand.objects.all()
+        return BrandSerializer(brand,many=True).data
+    class Meta:
+        model=Category
+        fields='__all__'

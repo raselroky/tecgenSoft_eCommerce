@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIView,RetrieveUpdateDestroyAPIView
 from catalog.models import Category,SubCategory,Brand
-from catalog.serializers import CategorySerializer,SubCategorySerializer,BrandSerializer
+from catalog.serializers import CategorySerializer,SubCategorySerializer,BrandSerializer,AllCategoryChildSerializer
 from rest_framework.views import APIView
 import json
 from rest_framework import status
@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.request import Request
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.db.models import  Prefetch, F, Sum
 
 
 class CategoryListCreateAPIView(ListCreateAPIView):
@@ -50,3 +51,11 @@ class BrandRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset=Brand.objects.all()
     serializer_class=BrandSerializer
     lookup_field='id'
+
+
+
+class PublicAllCategoryListAPIView(ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = AllCategoryChildSerializer
+    search_fields = ['name','is_active']
+    queryset = Category.objects.all()
