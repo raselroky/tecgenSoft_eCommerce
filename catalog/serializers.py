@@ -30,10 +30,10 @@ class AllCategoryChildSerializer(serializers.ModelSerializer):
     brand=serializers.SerializerMethodField()
 
     def get_sub_category(self,obj):
-        subcategory=SubCategory.objects.all()
+        subcategory=SubCategory.objects.filter(category__name=obj)
         return SubCategorySerializer(subcategory,many=True).data
     def get_brand(self,obj):
-        brand=Brand.objects.all()
+        brand=Brand.objects.filter(category__name=obj)
         return BrandSerializer(brand,many=True).data
     class Meta:
         model=Category

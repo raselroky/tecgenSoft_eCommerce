@@ -58,4 +58,4 @@ class PublicAllCategoryListAPIView(ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = AllCategoryChildSerializer
     search_fields = ['name','is_active']
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('-created_at')
