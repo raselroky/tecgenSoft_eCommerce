@@ -16,7 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-
+class UserLiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = ['first_name', 'last_name', 'username', 'email', 'contact_number', 'is_active']
 
 class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:

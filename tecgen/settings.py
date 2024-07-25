@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'helper',
     'user',
     'catalog',
+    'store',
 ]
 
 MIDDLEWARE = [
