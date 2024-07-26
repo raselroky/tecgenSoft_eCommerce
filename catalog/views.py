@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIView,RetrieveUpdateDestroyAPIView
-from catalog.models import Category,SubCategory,Brand
-from catalog.serializers import CategorySerializer,SubCategorySerializer,BrandSerializer,AllCategoryChildSerializer
+from catalog.models import Category,SubCategory,Brand,Attribute,AttributeValue
+from catalog.serializers import CategorySerializer,SubCategorySerializer,BrandSerializer,AllCategoryChildSerializer,AttributeSerializer,AttributeValueSerializer
 from rest_framework.views import APIView
 import json
 from rest_framework import status
@@ -59,3 +59,16 @@ class PublicAllCategoryListAPIView(ListAPIView):
     serializer_class = AllCategoryChildSerializer
     search_fields = ['name','is_active']
     queryset = Category.objects.all().order_by('-created_at')
+
+
+
+
+class AttributeListCreateAPIView(ListCreateAPIView):
+    permission_classes=[IsAuthenticated,]
+    queryset=Attribute.objects.all()
+    serializer_class=AttributeSerializer
+
+class AttributevalueListCreateAPIView(ListCreateAPIView):
+    permission_classes=[IsAuthenticated,]
+    queryset=AttributeValue.objects.all()
+    serializer_class=AttributeValueSerializer

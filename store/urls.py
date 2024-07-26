@@ -2,7 +2,7 @@ from django.urls import path
 from store.views import (
     VendorStoreCreateAPIView,
     VendorStoreRetrieveUpdateAPIView,
-    VendorStoreGetAPIView,PublicStoreListAPIView
+    VendorStoreGetAPIView,PublicStoreListAPIView,PublicStoreRetrieveAPIView
 )
 
 
@@ -15,5 +15,6 @@ urlpatterns = [
          name='vendor-store-get'),
 
     path('public-store-list',PublicStoreListAPIView.as_view(),name='public-store-list'),
+    path('public-store-retrieve',PublicStoreRetrieveAPIView.as_view(),name='public-store-retrieve'),
 
 ]

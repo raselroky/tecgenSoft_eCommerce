@@ -58,7 +58,7 @@ class VendorStoreGetAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = StoreSerializer
     queryset = Store.objects.filter()
-    search_fields = ['name']
+    search_fields = ['name','is_active','email']
     
     def get_queryset(self):
         store = self.request.user.store
@@ -78,7 +78,12 @@ class PublicStoreListAPIView(ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = StoreLiteSerializer
     queryset = Store.objects.filter(shown_in_website=True)
-    search_fields = [ 'name','store_category__slug']
+    search_fields = [ 'name','is_active','email']
     #filterset_class = StoreFilter
    
-    
+class PublicStoreRetrieveAPIView(RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = StoreLiteSerializer
+    queryset = Store.objects.filter(shown_in_website=True)
+    search_fields = [ 'name','is_active','email']
+    lookup_field='id'

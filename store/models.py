@@ -7,7 +7,7 @@ class Store(models.Model):
     updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
 
     created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
 
     name=models.CharField(max_length=500,null=True,blank=True)
     email=models.EmailField(max_length=500,null=True,blank=True)
@@ -37,6 +37,12 @@ class Store(models.Model):
 
 
 class StorePaymentMethod(models.Model):
+    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     type = models.CharField(
         max_length=30, choices=PaymentMethodOptions.choices)

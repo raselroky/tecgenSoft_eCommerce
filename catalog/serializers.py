@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from catalog.models import Category,SubCategory,Brand
+from catalog.models import Category,SubCategory,Brand,AttributeValue,Attribute
 
 class CategorySerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
@@ -37,4 +37,18 @@ class AllCategoryChildSerializer(serializers.ModelSerializer):
         return BrandSerializer(brand,many=True).data
     class Meta:
         model=Category
+        fields='__all__'
+
+
+class AttributeSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True)
+   
+    class Meta:
+        model=Attribute
+        fields='__all__'
+class AttributeValueSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True)
+   
+    class Meta:
+        model=AttributeValue
         fields='__all__'
