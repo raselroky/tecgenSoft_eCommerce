@@ -1,20 +1,18 @@
 from django.urls import path
 from store.views import (
     VendorStoreCreateAPIView,
-    VendorStoreRetrieveUpdateAPIView,
-    VendorStoreGetAPIView,PublicStoreListAPIView,PublicStoreRetrieveAPIView
+    VendorStoreRetrieveUpdateDestroyAPIView,
+    VendorStoreListAPIView,PublicStoreListAPIView,PublicStoreRetrieveAPIView
 )
 
 
 urlpatterns = [
     path('store-create', VendorStoreCreateAPIView.as_view(),
          name='vendor-store-list-create'),
-    path('store-retrieve-update/<int:id>', VendorStoreRetrieveUpdateAPIView.as_view(),
-         name='vendor-store-get-update'),
-    path('get-store', VendorStoreGetAPIView.as_view(),
-         name='vendor-store-get'),
+    path('store-retrieve-update/<int:id>', VendorStoreRetrieveUpdateDestroyAPIView.as_view(),name='vendor-store-get-update'),
+    path('store-list', VendorStoreListAPIView.as_view(),name='vendor-store-list'),
 
-    path('public-store-list',PublicStoreListAPIView.as_view(),name='public-store-list'),
-    path('public-store-retrieve',PublicStoreRetrieveAPIView.as_view(),name='public-store-retrieve'),
+    path('users-store-list',PublicStoreListAPIView.as_view(),name='public-store-list'),
+    path('users-store-retrieve/<int:id>',PublicStoreRetrieveAPIView.as_view(),name='public-store-retrieve'),
 
 ]

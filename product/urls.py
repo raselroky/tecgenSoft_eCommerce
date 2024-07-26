@@ -20,12 +20,12 @@ urlpatterns=[
 
 
     #users
-    path('productvariant-list/',PublicProductVariantListAPIView.as_view(),name='user-product-variant-list'),
-    path('productvariant-retrieve/<int:id>',PublicProductVariantRetrieveAPIView.as_view(),name='user-product-variant-retrieve'),
-    path('productvariant-attribute-list/',PublicProductVariantAttributeListAPIView.as_view(),name='user-product-variant-attribute-list'),
-    path('productvariant-attribute-retrieve/<int:id>',PublicProductVariantAttributeRetrieveAPIView.as_view(),name='user-product-variant-attribute-retrieve'),
-    path('productvariant-review-list/',PublicProductVariantReviewListAPIView.as_view(),name='user-product-variant-review-list'),
-    path('productvariant-review-retrieve/<int:id>',PublicProductVariantReviewretRieveAPIView.as_view(),name='user-product-variant-review-retrieve'),
+    path('users-productvariant-list/',PublicProductVariantListAPIView.as_view(),name='user-product-variant-list'),
+    path('users-productvariant-retrieve/<int:id>',PublicProductVariantRetrieveAPIView.as_view(),name='user-product-variant-retrieve'),
+    path('users-productvariant-attribute-list/',PublicProductVariantAttributeListAPIView.as_view(),name='user-product-variant-attribute-list'),
+    path('users-productvariant-attribute-retrieve/<int:id>',PublicProductVariantAttributeRetrieveAPIView.as_view(),name='user-product-variant-attribute-retrieve'),
+    path('users-productvariant-review-list/',PublicProductVariantReviewListAPIView.as_view(),name='user-product-variant-review-list'),
+    path('users-productvariant-review-retrieve/<int:id>',PublicProductVariantReviewretRieveAPIView.as_view(),name='user-product-variant-review-retrieve'),
 
 
 

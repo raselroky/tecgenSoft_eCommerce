@@ -54,7 +54,7 @@ class VendorStoreCreateAPIView(ListCreateAPIView):
 
 
 
-class VendorStoreGetAPIView(ListAPIView):
+class VendorStoreListAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = StoreSerializer
     queryset = Store.objects.filter()
@@ -65,11 +65,16 @@ class VendorStoreGetAPIView(ListAPIView):
         return self.queryset.none() if not store else self.queryset.filter(id=store.id)
     
     
-class VendorStoreRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+class VendorStoreRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = StoreSerializer
     queryset = Store.objects.filter()
     lookup_field = 'id'
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"message": "Store deleted successfully."}, status=status.HTTP_200_OK)
 
 
 
