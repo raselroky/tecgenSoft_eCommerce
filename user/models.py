@@ -13,7 +13,7 @@ GENDER=(
 
 class Users(AbstractBaseUser):
    
-    username = models.CharField(max_length=500, unique=True)
+    username = models.CharField(max_length=500)
     email = models.EmailField(_('email address'),null=True,blank=True)
     contact_number = models.CharField(max_length=14, null= True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
