@@ -82,44 +82,29 @@ class login_with_password(APIView):
         password = request.data['password']
         if not username or not password:
             raise ValidationError(detail='contact number and password is required', code=status.HTTP_400_BAD_REQUEST)
-        try:
-            x=str(username)
-            y=x[0]+x[1]+x[2]
-       
-            if(y=='+88'):
-                usernamea=x
-                usernameb=x[3:14]
-                if(Users.objects.filter(username=usernamea).exists()):
-                    user = Users.objects.get(username__exact=usernamea)
-                #print('+88')
-                elif(Users.objects.filter(username=usernameb).exists()):
-                    user = Users.objects.get(username__exact=usernameb)
-                #print('013',user)
-                else:
-                    raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
-            else:
-                usernamea=x
-                usernameb='+88'+x
-                if(Users.objects.filter(username=usernamea).exists()):
-                    user = Users.objects.get(username__exact=usernamea)
-                elif(Users.objects.filter(username=usernameb).exists()):
-                    user = Users.objects.get(username__exact=usernameb)
-                else:
-                    raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
         
-            if not user.check_password(raw_password=password):
-                raise ValidationError(detail='invalid password',code=status.HTTP_400_BAD_REQUEST)
-            if not user.is_active:
-                raise ValidationError(detail='inactive account',code=status.HTTP_403_FORBIDDEN)
+        if Users.objects.filter(username=username).exists():
+            # Get the actual user object
+            user = Users.objects.get(username=username)
+            
+            # Check the password
+            if not user.check_password(password):
+                return Response({"message": "Invalid Password."}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            # Generate tokens
             access_token, refresh_token = create_tokens(user=user)
             data = {
                 'access_token': access_token,
                 'refresh_token': refresh_token,
             }
-            set_cache(key=f'{user}_token_data', value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
-            return Response(data=data, status=status.HTTP_201_CREATED)
-        except Users.DoesNotExist:
-            raise ValidationError(detail="User Doesn't exist.",code=status.HTTP_404_NOT_FOUND)
+            
+            # Cache the user token data
+            set_cache(key=f'{user.username}_token_data', value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
+            
+            return Response(data, status=status.HTTP_201_CREATED)
+        
+        return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
+    
 
 
 
