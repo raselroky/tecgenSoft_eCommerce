@@ -37,9 +37,13 @@ class UserListCreateAPIView(APIView):
     def post(self,request):
         
         username = request.data['username']
+        email = request.data['email']
         users=Users.objects.filter(username=username).exists()
+        users_e=Users.objects.filter(email=email).exists()
         if users:
             return Response({"message":"This username is already taken."})
+        if users_e:
+            return Response({"message":"This email is already taken."})
         user_serializer = UserSerializer(data=request.data)
         if user_serializer.is_valid():
 

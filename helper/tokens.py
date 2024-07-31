@@ -10,6 +10,7 @@ def generate_access_token(user: Users) -> str:
         'first_name': user.first_name,
         'last_name': user.last_name,
         'username': user.username,
+        'email':user.email,
         'is_active': user.is_active,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=48),
         'token_type': 'access'

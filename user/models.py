@@ -40,15 +40,15 @@ class Users(AbstractBaseUser):
     def __str__(self):
         return self.username
     
-    # @property
-    # def get_full_name(self):
-    #     if(self.first_name and self.last_name):
-    #         return str(self.first_name) + ' ' + str(self.last_name)
-    #     else:
-    #         if(self.first_name):
-    #             return str(self.first_name)
-    #         elif(self.last_name):
-    #             return str(self.last_name)
+    @property
+    def get_full_name(self):
+        if(self.first_name and self.last_name):
+            return str(self.first_name) + ' ' + str(self.last_name)
+        else:
+            if(self.first_name):
+                return str(self.first_name)
+            elif(self.last_name):
+                return str(self.last_name)
 
 
 
