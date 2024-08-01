@@ -2,10 +2,10 @@ import datetime
 from typing import Tuple
 import jwt
 from django.conf import settings
-from user.models import Users
+from user.models import User
 
 
-def generate_access_token(user: Users) -> str:
+def generate_access_token(user: User) -> str:
     token_data = {
         'first_name': user.first_name,
         'last_name': user.last_name,
@@ -20,7 +20,7 @@ def generate_access_token(user: Users) -> str:
     return token
 
 
-def generate_refresh_token(user: Users) -> str:
+def generate_refresh_token(user: User) -> str:
     token_data = {
         'username': user.username,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(weeks=1),
@@ -31,5 +31,5 @@ def generate_refresh_token(user: Users) -> str:
     return token
 
 
-def create_tokens(user: Users) -> Tuple[str, str]:
+def create_tokens(user: User) -> Tuple[str, str]:
     return generate_access_token(user=user), generate_refresh_token(user=user)

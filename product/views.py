@@ -21,6 +21,19 @@ class ProductUnitListCreateAPIView(ListCreateAPIView):
     queryset=ProductUnit.objects.all()
     serializer_class=ProductUnitSeriaizer
 
+    def create(self, request, *args, **kwargs):
+        # Modify request data to include created_by
+        data = request.data.copy()  # Create a mutable copy of request.data
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 class ProductUnitRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=ProductUnit.objects.all()
@@ -37,6 +50,19 @@ class ProductVariantListCreateAPIView(ListCreateAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=ProductVariant.objects.all()
     serializer_class=ProductVariantSeriaizer
+
+    def create(self, request, *args, **kwargs):
+        # Modify request data to include created_by
+        data = request.data.copy()  # Create a mutable copy of request.data
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 class ProductVariantRetrieveUpdateDestroyListCreateAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
@@ -55,6 +81,19 @@ class ProductVariantAttributeListCreateAPIView(ListCreateAPIView):
     queryset=ProductVariantAttribute.objects.all()
     serializer_class=ProductvariantAttributeSeriaizer
 
+    def create(self, request, *args, **kwargs):
+        # Modify request data to include created_by
+        data = request.data.copy()  # Create a mutable copy of request.data
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 class ProductVariantAttributeRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=ProductVariantAttribute.objects.all()
@@ -70,6 +109,19 @@ class ProductVariantReviewListCreateAPIView(ListCreateAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=ProductVariantReview.objects.all()
     serializer_class=ProductVariantReviewSeriaizer
+
+    def create(self, request, *args, **kwargs):
+        # Modify request data to include created_by
+        data = request.data.copy()  # Create a mutable copy of request.data
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 class ProductVariantReviewRetrieveUpdateDestroyAPIView(ListCreateAPIView):
     permission_classes=(IsAuthenticated,)

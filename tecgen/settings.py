@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'store',
     'product',
     'campaign',
+    'order',
+    'configure',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -179,3 +182,4 @@ CORS_ALLOW_METHODS = [
 
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
 SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
+

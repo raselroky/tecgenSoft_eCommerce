@@ -31,6 +31,7 @@ urlpatterns = [
     path('store/',include('store.urls')),
     path('campaign/',include('campaign.urls')),
     path('product/',include('product.urls')),
+    path('configure/',include('configure.urls')),
 
     path('swagger',schema_view.with_ui('swagger',cache_timeout=0),name='schema-swagger-ui'),
 

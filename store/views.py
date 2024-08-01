@@ -26,31 +26,18 @@ class VendorStoreCreateAPIView(ListCreateAPIView):
     queryset = Store.objects.filter()
     search_fields = ['name']
     
-    def perform_create(self, serializer):
-        return serializer.save()
-
     def create(self, request, *args, **kwargs):
-        user = self.request.user
-        if user.store:
-            return Response({"message": "Can not create more than one store"},status=status.HTTP_403_FORBIDDEN)
-        
-        name = self.request.data['name']
-        request.data['is_active']=False
-        # request.data['district'] = get_object_or_404(
-        #     District, id=request.data['district']).id 
-        # request.data['division'] = get_object_or_404(
-        #     Division, id=request.data['division']).id
-        request.data['created_by'] = self.request.user.id
-        
-        serializer = self.get_serializer(data=request.data)
+        # Modify request data to include created_by
+        data = request.data.copy()  # Create a mutable copy of request.data
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        store = self.perform_create(serializer)
+        self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        
-        user.store = store
-        user.save()
-
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 
 

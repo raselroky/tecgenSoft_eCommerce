@@ -2,28 +2,29 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from store.models import Store
 from django.core.validators import MinValueValidator, MaxValueValidator
-from user.models import Users
+from user.models import User
 from catalog.models import Category,SubCategory,Brand,Attribute,AttributeValue
+from helper.models import BaseModel
 
 
-class ProductUnit(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='ProductUnit',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class ProductUnit(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
     unit=models.CharField(max_length=500,null=True,blank=True)
     is_active=models.BooleanField(default=True)
     def __str__(self):
         return str(self.unit)
 
-class ProductVariant(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='ProductVariant',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class ProductVariant(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
     name=models.CharField(max_length=500,null=True,blank=True) #frontend required
     description=models.TextField(null=True,blank=True)
@@ -51,12 +52,12 @@ class ProductVariant(models.Model):
         return str(self.id)
 
 
-class ProductVariantAttribute(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='ProductVariantAttribute',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class ProductVariantAttribute(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
     
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE,null=True,blank=True)
@@ -77,12 +78,13 @@ class ProductVariantAttribute(models.Model):
         return str(self.id) 
     
 
-class ProductVariantReview(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='ProductVariantReview',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class ProductVariantReview(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
+
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE,null=True,blank=True)
     #order = models.ForeignKey(to='orders.Order', on_delete=models.CASCADE, null=True)
     review = models.TextField(blank=True,null=True)

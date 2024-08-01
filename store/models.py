@@ -1,13 +1,14 @@
 from django.db import models
-from user.models import Users
+from user.models import User
 from helper.models import PaymentMethodOptions
+from helper.models import BaseModel
 
-class Store(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class Store(BaseModel):
+    # created_by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
     name=models.CharField(max_length=500,null=True,blank=True)
     email=models.EmailField(max_length=500,null=True,blank=True)
@@ -36,12 +37,12 @@ class Store(models.Model):
         return self.name
 
 
-class StorePaymentMethod(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class StorePaymentMethod(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
     
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     type = models.CharField(

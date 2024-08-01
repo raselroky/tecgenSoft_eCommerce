@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from user.models import Users,UserAddress
+from user.models import User,UserAddress
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -8,23 +8,23 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.CharField(required=True)
 
     class Meta:
-        model = Users
+        model = User
         fields = ['username', 'first_name','last_name','email','contact_number','password']
 
     def create(self, validated_data):
-        user = Users.objects.create(**validated_data)
+        user = User.objects.create(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
         return user
 
 class UserLiteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'contact_number', 'is_active']
 
 class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = User
         fields = '__all__'
 
 class UserAddressSerializer(serializers.ModelSerializer):

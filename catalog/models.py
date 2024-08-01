@@ -1,23 +1,17 @@
 from django.db import models
-from user.models import Users
-from helper.models import CustomQuerySetManager
-
-# class BaseModel(models.Model):
-#     created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
-#     updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
-
-#     created_at=models.DateTimeField(auto_now_add=True)
-#     updated_at=models.DateTimeField(auto_now_add=True)
-
-class Category(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='Category',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
-
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+from helper.models import CustomQuerySetManager,BaseModel
 
 
-    name=models.CharField(max_length=500,unique=True)
+
+class Category(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
+
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
+
+
+    name=models.CharField(max_length=500,null=True,blank=True)
     show_in_ecommerce=models.BooleanField(default=False)
     ordering = models.PositiveIntegerField(default=0)
     icon=models.FileField(upload_to='iamges',null=True,blank=True)
@@ -28,15 +22,15 @@ class Category(models.Model):
         return self.name
 
 
-class SubCategory(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='SubCategory',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class SubCategory(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
     
-    name=models.CharField(max_length=500,unique=True)
+    name=models.CharField(max_length=500,null=True,blank=True)
     category=models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
     show_in_ecommerce=models.BooleanField(default=False)
     ordering = models.PositiveIntegerField(default=0)
@@ -51,15 +45,15 @@ class SubCategory(models.Model):
 
 
 
-class Brand(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='Brand',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class Brand(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
 
-    name=models.CharField(max_length=500,unique=True)
+    name=models.CharField(max_length=500,null=True,blank=True)
     category=models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
     sub_category=models.ForeignKey(SubCategory,on_delete=models.CASCADE,null=True,blank=True)
     show_in_ecommerce=models.BooleanField(default=False)
@@ -74,12 +68,12 @@ class Brand(models.Model):
 
 
 
-class Attribute(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='Attribute',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class Attribute(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
     name = models.CharField(max_length=500)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,null=True,blank=True)
@@ -100,12 +94,12 @@ class Attribute(models.Model):
         return self.name
 
 
-class AttributeValue(models.Model):
-    created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='AttributeValue',null=True,blank=True)
-    updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,null=True,blank=True)
+class AttributeValue(BaseModel):
+    # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
+    # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)
 
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now=True)
 
     name = models.CharField(max_length=50)
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE,null=True,blank=True)

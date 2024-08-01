@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIView,RetrieveUpdateDestroyAPIView
-from user.models import Users,UserAddress
+from user.models import User,UserAddress
 from user.serializers import UserSerializer,UserAddressSerializer,UserTokenSerializer
 from rest_framework.views import APIView
 from helper.tokens import create_tokens
@@ -38,8 +38,8 @@ class UserListCreateAPIView(APIView):
         
         username = request.data['username']
         email = request.data['email']
-        users=Users.objects.filter(username=username).exists()
-        users_e=Users.objects.filter(email=email).exists()
+        users=User.objects.filter(username=username).exists()
+        users_e=User.objects.filter(email=email).exists()
         if users:
             return Response({"message":"This username is already taken."})
         if users_e:
@@ -87,9 +87,9 @@ class login_with_password(APIView):
         if not username or not password:
             raise ValidationError(detail='contact number and password is required', code=status.HTTP_400_BAD_REQUEST)
         
-        if Users.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
             # Get the actual user object
-            user = Users.objects.get(username=username)
+            user = User.objects.get(username=username)
             
             # Check the password
             if not user.check_password(password):
@@ -126,7 +126,7 @@ class logout(APIView):
         }
     )
     def post(self,request):
-        username = request.user.username
+        username = self.request.user.username
         delete_cache(f'{username}_token_data')
         return Response({"message": "Successfully logged out"})
 
@@ -172,7 +172,7 @@ class refreshed_token(APIView) :
                     'success': False
                 }, status=400)
             user_name = payload.get('username')
-            user_obj = get_object_or_404(Users, username=user_name)
+            user_obj = get_object_or_404(User, username=user_name)
             delete_cache(f'{user_obj.username}_token_data')
             if not user_obj.is_active:
                 raise ValidationError(detail='user is not active', code=status.HTTP_401_UNAUTHORIZED)

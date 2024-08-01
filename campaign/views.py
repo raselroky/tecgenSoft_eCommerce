@@ -20,6 +20,21 @@ class CampaignListCreateAPIView(ListCreateAPIView):
     queryset=Campaign.objects.all()
     serializer_class=CampaignSerializer
 
+    def create(self, request, *args, **kwargs):
+        # Modify request data to include created_by
+        data = request.data.copy()  # Create a mutable copy of request.data
+        data['created_by'] = request.user.id
+        if Campaign.objects.filter(name=request.data['name']):
+            return Response({"message":"This name is already exist!"})
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 class CampaignRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=Campaign.objects.all()
@@ -37,6 +52,19 @@ class CampaignMemberListCreateAPIView(ListCreateAPIView):
     queryset=CampaignMember.objects.all()
     serializer_class=CampaignMemberSerializer
 
+    def create(self, request, *args, **kwargs):
+        # Modify request data to include created_by
+        data = request.data.copy()  # Create a mutable copy of request.data
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 class CampaignMemberRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=CampaignMember.objects.all()
@@ -46,7 +74,7 @@ class CampaignMemberRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response({"message": "CampaignMember deleted successfully."}, status=status.HTTP_200_OK)
+        return Response({"message": "CampaignMem deleted successfully."}, status=status.HTTP_200_OK)
 
 
 class DealOfTheWeekListCreateAPIView(ListCreateAPIView):
