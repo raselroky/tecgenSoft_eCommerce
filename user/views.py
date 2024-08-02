@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIView,RetrieveUpdateDestroyAPIView
-from user.models import User,UserAddress
+from user.models import UserAddress
 from user.serializers import UserSerializer,UserAddressSerializer,UserTokenSerializer
 from rest_framework.views import APIView
 from helper.tokens import create_tokens
@@ -18,7 +18,13 @@ from django.http import JsonResponse
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework.authentication import TokenAuthentication
+import logging
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class UserListCreateAPIView(APIView):
 
@@ -45,24 +51,34 @@ class UserListCreateAPIView(APIView):
         if users_e:
             return Response({"message":"This email is already taken."})
         user_serializer = UserSerializer(data=request.data)
+        
         if user_serializer.is_valid():
 
-            user=user_serializer.save()
+            user_serializer.save()
 
 
-            access_token, refresh_token = create_tokens(user=user)
+            # access_token, refresh_token = create_tokens(user=user)
+            # data = {
+            #     'access_token': access_token,
+            #     'refresh_token': refresh_token,
+            #     }
+            if User.objects.filter(username=username).exists():
+                user=User.objects.get(username=username)
+            token, created = Token.objects.get_or_create(user=user)
             data = {
-                'access_token': access_token,
-                'refresh_token': refresh_token,
+                'token': token.key,
+                'username': user.username,
+                'email': user.email
                 }
-            set_cache(key=f'{user.username}_token_data', value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
+            cache_key = f'{user.username}_token_data'
+            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
 
-class login_with_password(APIView):
+class Login(APIView):
     permission_classes=(AllowAny,)
 
     @swagger_auto_schema(
@@ -81,39 +97,47 @@ class login_with_password(APIView):
             404: "User Doesn't exist"
         }
     )
-    def post(self,request):
+    def post(self,request,*args, **kwargs):
+    
         username = request.data['username']
         password = request.data['password']
         if not username or not password:
-            raise ValidationError(detail='contact number and password is required', code=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError(detail='username and password is required', code=status.HTTP_400_BAD_REQUEST)
         
         if User.objects.filter(username=username).exists():
-            # Get the actual user object
             user = User.objects.get(username=username)
             
-            # Check the password
             if not user.check_password(password):
                 return Response({"message": "Invalid Password."}, status=status.HTTP_401_UNAUTHORIZED)
-            
-            # Generate tokens
-            access_token, refresh_token = create_tokens(user=user)
+                        
+            # access_token, refresh_token = create_tokens(user=user)
+            # data = {
+            #     'access_token': access_token,
+            #     'refresh_token': refresh_token,
+            # }
+            token, created = Token.objects.get_or_create(user=user)
             data = {
-                'access_token': access_token,
-                'refresh_token': refresh_token,
-            }
+                'token': token.key,
+                'username': user.username,
+                'email': user.email
+                }
             
-            # Cache the user token data
-            set_cache(key=f'{user.username}_token_data', value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
-            
+            cache_key = f'{user.username}_token_data'
+            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
+           
+            # cached_data = get_cache(cache_key)
+            # print('cache',cached_data)
             return Response(data, status=status.HTTP_201_CREATED)
+        
+            
         
         return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
     
 
 
-
-class logout(APIView):
-    permission_classes=(IsAuthenticated,)
+class Logout(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes=(AllowAny,)
 
     @swagger_auto_schema(
             request_body=openapi.Schema(
@@ -132,18 +156,22 @@ class logout(APIView):
             )),
         }
     )
-    def post(self,request):
-        username = self.request.user.username
-        delete_cache(f'{username}_token_data')
-        return Response({"message": "Successfully logged out"})
+    def post(self, request):
+        username = request.data['username']
+        key= request.data['key']
+        if User.objects.filter(username=username).exists():
+            user=User.objects.get(username=username)
+        try:
+            token = Token.objects.get(user=user,key=key)
+            token.delete()
+            delete_cache(username)
+            return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
+        except Token.DoesNotExist:
+            return Response({"message": "Token not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-# class LogoutView(APIView):
-#     permission_classes = [IsAuthenticated]
 
-#     def post(self, request):
-#         request.user.auth_token.delete()
-#         return Response({'message': 'Successfully logged out.'})
+
 
 
 class refreshed_token(APIView) :

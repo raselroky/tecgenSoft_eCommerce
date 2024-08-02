@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_yasg',
     'corsheaders',
     'helper',
@@ -135,11 +136,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissions',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -183,3 +183,11 @@ CORS_ALLOW_METHODS = [
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
 SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # Using local memory cache for example
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+AUTH_USER_MODEL = 'user.User'
