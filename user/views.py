@@ -4,7 +4,7 @@ from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIVie
 from user.models import UserAddress
 from user.serializers import UserSerializer,UserAddressSerializer,UserTokenSerializer
 from rest_framework.views import APIView
-from helper.tokens import create_tokens
+from helper.tokens import create_tokens,generate_tokens_for_user
 from helper.caching import set_cache,get_cache,delete_cache
 import json
 from rest_framework import status
@@ -64,12 +64,13 @@ class UserListCreateAPIView(APIView):
             #     }
             if User.objects.filter(username=username).exists():
                 user=User.objects.get(username=username)
-            token, created = Token.objects.get_or_create(user=user)
+            token=generate_tokens_for_user(user)
             data = {
-                'token': token.key,
+                'token': token,
                 'username': user.username,
                 'email': user.email
                 }
+            
             cache_key = f'{user.username}_token_data'
             set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
             return Response(data, status=status.HTTP_201_CREATED)
@@ -115,9 +116,9 @@ class Login(APIView):
             #     'access_token': access_token,
             #     'refresh_token': refresh_token,
             # }
-            token, created = Token.objects.get_or_create(user=user)
+            token=generate_tokens_for_user(user)
             data = {
-                'token': token.key,
+                'token': token,
                 'username': user.username,
                 'email': user.email
                 }
@@ -125,8 +126,8 @@ class Login(APIView):
             cache_key = f'{user.username}_token_data'
             set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
            
-            # cached_data = get_cache(cache_key)
-            # print('cache',cached_data)
+            cached_data = get_cache(cache_key)
+            print('cache',cached_data)
             return Response(data, status=status.HTTP_201_CREATED)
         
             
@@ -136,8 +137,7 @@ class Login(APIView):
 
 
 class Logout(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes=(AllowAny,)
+    permission_classes=(IsAuthenticated,)
 
     @swagger_auto_schema(
             request_body=openapi.Schema(
@@ -156,18 +156,19 @@ class Logout(APIView):
             )),
         }
     )
-    def post(self, request):
-        username = request.data['username']
-        key= request.data['key']
-        if User.objects.filter(username=username).exists():
-            user=User.objects.get(username=username)
-        try:
-            token = Token.objects.get(user=user,key=key)
-            token.delete()
-            delete_cache(username)
+    def get(self, request):
+        
+        user = self.request.user
+        
+        cache_key = f'{user.username}_token_data'
+        cached_data = get_cache(cache_key)
+        
+        if cached_data:
+            delete=delete_cache(cache_key)
+            
             return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
-        except Token.DoesNotExist:
-            return Response({"message": "Token not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"Message: you are already logout!"})
+    
 
 
 
