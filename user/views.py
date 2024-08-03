@@ -127,7 +127,7 @@ class Login(APIView):
             set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60)
            
             cached_data = get_cache(cache_key)
-            print('cache',cached_data)
+            
             return Response(data, status=status.HTTP_201_CREATED)
         
             
@@ -175,52 +175,36 @@ class Logout(APIView):
 
 
 
-class refreshed_token(APIView) :
-    permission_classes=(AllowAny,)
+# class refreshed_token(APIView) :
+#     permission_classes=(AllowAny,)
 
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh token of the user'),
-            },
-            required=['refresh_token']
-        ),
-        responses={
-            201: openapi.Response('Token refreshed successfully', openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'access_token': openapi.Schema(type=openapi.TYPE_STRING, description='New access token'),
-                    'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='New refresh token'),
-                }
-            )),
-            400: 'No refresh token provided',
-            401: 'User is not active or token is invalid'
-        }
-    )
-    def post(self,request):
-        refreshed_token = request.data.get('refresh_token')
-        try:
-            payload = jwt.decode(jwt=refreshed_token, key=settings.SECRET_KEY, algorithms='HS256', verify=True)
-            if payload['token_type'] != 'refresh':
-                return JsonResponse(data={
-                    'message': 'no refresh token provided',
-                    'success': False
-                }, status=400)
-            user_name = payload.get('username')
-            user_obj = get_object_or_404(User, username=user_name)
-            delete_cache(f'{user_obj.username}_token_data')
-            if not user_obj.is_active:
-                raise ValidationError(detail='user is not active', code=status.HTTP_401_UNAUTHORIZED)
-            access_token, refresh_token = create_tokens(user=user_obj)
-            data = {
-                'access_token': access_token,
-                'refresh_token': refresh_token,
-            }
-            set_cache(key=f'{user_obj.username}_token_data', value=json.dumps(UserTokenSerializer(user_obj).data), ttl=5*60*60)
-            return Response(data=data, status=status.HTTP_201_CREATED)
-        except Exception as err:
-            return JsonResponse(data={
-                'message': f'{str(err)}',
-                'success': False,
-            }, status=401)
+#     @swagger_auto_schema(
+#         request_body=openapi.Schema(
+#             type=openapi.TYPE_OBJECT,
+#             properties={
+#                 'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh token of the user'),
+#             },
+#             required=['refresh_token']
+#         ),
+#         responses={
+#             201: openapi.Response('Token refreshed successfully', openapi.Schema(
+#                 type=openapi.TYPE_OBJECT,
+#                 properties={
+#                     'access_token': openapi.Schema(type=openapi.TYPE_STRING, description='New access token'),
+#                     'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='New refresh token'),
+#                 }
+#             )),
+#             400: 'No refresh token provided',
+#             401: 'User is not active or token is invalid'
+#         }
+#     )
+#     def post(self,request):
+#         refresh_token = request.data['refresh_token']
+        
+#         user=self.request.user
+#         cache_key = f'{user.username}_token_data'
+#         cached_data = get_cache(cache_key)
+
+#         print(cached_data)
+#         print(user)
+#         return Response({"Message":"okkk!"})

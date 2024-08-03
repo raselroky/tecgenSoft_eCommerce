@@ -1,5 +1,5 @@
 from django.urls import path,include
-from user.views import UserListCreateAPIView,Login,Logout,refreshed_token
+from user.views import UserListCreateAPIView,Login,Logout
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns=[
@@ -8,6 +8,6 @@ urlpatterns=[
     path('logout/',Logout.as_view(),name='logout-users'),
     #path('logouts/',obtain_auth_token,name='logout-users'),
     
-    path('refresh-token/',refreshed_token.as_view(),name='refresh-token-users'),
+    #path('refresh-token/',refreshed_token.as_view(),name='refresh-token-users'),
 
 ]
