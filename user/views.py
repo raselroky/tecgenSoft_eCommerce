@@ -139,23 +139,23 @@ class Login(APIView):
 class Logout(APIView):
     permission_classes=(IsAuthenticated,)
 
-    @swagger_auto_schema(
-            request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username or contact number of the user'),
-            },
-            required=['username']
-        ),
-        responses={
-            200: openapi.Response('Successfully logged out', openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'message': openapi.Schema(type=openapi.TYPE_STRING, description='Success message')
-                }
-            )),
-        }
-    )
+    # @swagger_auto_schema(
+    #         request_body=openapi.Schema(
+    #         type=openapi.TYPE_OBJECT,
+    #         properties={
+    #             'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username or contact number of the user'),
+    #         },
+    #         required=['username']
+    #     ),
+    #     responses={
+    #         200: openapi.Response('Successfully logged out', openapi.Schema(
+    #             type=openapi.TYPE_OBJECT,
+    #             properties={
+    #                 'message': openapi.Schema(type=openapi.TYPE_STRING, description='Success message')
+    #             }
+    #         )),
+    #     }
+    # )
     def get(self, request):
         
         user = self.request.user

@@ -1,6 +1,6 @@
 from django.urls import path,include
 from user.views import UserListCreateAPIView,Login,Logout
-from rest_framework.authtoken.views import obtain_auth_token
+
 
 urlpatterns=[
     path('signup/',UserListCreateAPIView.as_view(),name='user-create-api'),
