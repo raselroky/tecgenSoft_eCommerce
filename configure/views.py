@@ -29,11 +29,11 @@ class BannerListCreateAPIView(ListCreateAPIView):
 
     #@method_decorator(exception_handler)
     def create(self, request, *args, **kwargs):
-        # Modify request data to include created_by
         data = request.data.copy()  # Create a mutable copy of request.data
+        print("Request data:", data)
         data['created_by'] = request.user.id
-        if Banner.objects.filter(name=request.data['name']):
-            return Response({"message":"This name is already exist!"})
+        if Banner.objects.filter(name=request.data['name']).exists():
+            return Response({"message": "This name already exists!"}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -41,7 +41,9 @@ class BannerListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
+        print("Serializer data before save:", serializer.validated_data) 
         serializer.save(created_by=self.request.user)
+        print("Serializer data after save:", serializer.data)
 
 
 class BannerRetrieveUpdateDestroyAPIView(RetrieveUpdateAPIView):
