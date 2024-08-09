@@ -11,7 +11,7 @@ class SubCategoryAdminColumn(admin.ModelAdmin):
 admin.site.register(SubCategory,SubCategoryAdminColumn)
 
 class BrandAdminColumn(admin.ModelAdmin):
-    list_display=['id','created_by','updated_by','created_at','updated_at','name','category','sub_category','show_in_ecommerce','ordering','icon','logo','is_active']
+    list_display=['id','created_by','updated_by','created_at','updated_at','name','sub_category','show_in_ecommerce','ordering','icon','logo','is_active']
 admin.site.register(Brand,BrandAdminColumn)
 
 

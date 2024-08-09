@@ -54,7 +54,7 @@ class Brand(BaseModel):
 
 
     name=models.CharField(max_length=500,null=True,blank=True)
-    category=models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
+    #category=models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
     sub_category=models.ForeignKey(SubCategory,on_delete=models.CASCADE,null=True,blank=True)
     show_in_ecommerce=models.BooleanField(default=False)
     ordering = models.PositiveIntegerField(default=0)

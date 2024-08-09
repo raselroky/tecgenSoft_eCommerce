@@ -64,7 +64,7 @@ class UserListCreateAPIView(APIView):
             #     }
             if User.objects.filter(username=username).exists():
                 user=User.objects.get(username=username)
-            token=generate_tokens_for_user(user)
+            token=generate_tokens_for_user(user,expiration=24*60*60)
             data = {
                 'token': token,
                 'username': user.username,
@@ -72,7 +72,7 @@ class UserListCreateAPIView(APIView):
                 }
             
             cache_key = f'{user.username}_token_data'
-            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60*60)
+            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=24*60*60)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -116,7 +116,7 @@ class Login(APIView):
             #     'access_token': access_token,
             #     'refresh_token': refresh_token,
             # }
-            token=generate_tokens_for_user(user)
+            token=generate_tokens_for_user(user,expiration=24*60*60)
             data = {
                 'token': token,
                 'username': user.username,
@@ -124,10 +124,10 @@ class Login(APIView):
                 }
             
             cache_key = f'{user.username}_token_data'
-            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=5*60*60*60)
+            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=24*60*60)
            
             cached_data = get_cache(cache_key)
-            print('cache',cached_data)
+            #print('cache',cached_data)
             return Response(data, status=status.HTTP_201_CREATED)
         
             
