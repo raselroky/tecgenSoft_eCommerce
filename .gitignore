@@ -3,7 +3,7 @@ db/
 __pycache__/
 mediafiles/
 staticfiles/
-media/
+#media/
 staticfiles/
 static_assets/
 db.sqlite3
