@@ -193,4 +193,24 @@ CACHES = {
     }
 }
 
+# SSL_STORE_ID='shobl656ef44d52976'
+# SSL_STORE_PASSWORD='shobl656ef44d52976@ssl'
+# SSL_BASE_URL='https://5e90-103-142-170-229.ngrok-free.app'
+
+# AMARPAY_STORE_ID='aamarpaytest'
+# AMARPAY_SIGNATURE_KEY='dbb74894e82415a2f7ff0ec3a97e4183'
+# AMARPAY_BASE_URL='https://sandbox.aamarpay.com/jsonpost.php'
+
+# AMARPAY_MERCHANT_ID='shob'
+# AMARPAY_LIVE_STORE_ID='shob'
+# AMARPAY_LIVE_SIGNATURE_KEY='64b8a1c5474e92d67541689d5f3a09c7'
+# AMARPAY_LIVE_BASE_URL='https://secure.aamarpay.com/jsonpost.php'
+
+# SMS_TOKEN='b092777221e1fd03d2221e74e4d4073e4d21cffd'
+# SMS_URL='https://sysadmin.muthobarta.com/api/v1/'
+
+# FRONTEND_BASE_URL='https://shob.com.bd'
+# BACKEND_BASE_URL='http://192.168.68.130'
+
+
 AUTH_USER_MODEL = 'user.User'
