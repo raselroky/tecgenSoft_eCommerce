@@ -137,13 +137,23 @@ class ProductVariantReviewRetrieveUpdateDestroyAPIView(ListCreateAPIView):
 
 
 
-
-
 class PublicProductVariantListAPIView(ListAPIView):
-    permission_classes=(AllowAny,)
-    queryset=ProductVariant.objects.filter(is_active=True,show_in_ecommerce=True)
-    serializer_class=ProductVariantSeriaizer
-    search_fields=['name','is_active']
+    permission_classes = (AllowAny,)
+    serializer_class = ProductVariantSeriaizer
+
+    def get_queryset(self):
+        is_featured = self.request.query_params.get('is_featured', None)
+
+        queryset = ProductVariant.objects.filter(is_active=True, show_in_ecommerce=True)
+
+        if is_featured is not None:
+            try:
+                is_featured = is_featured.lower() in ['true', '1', 'yes']
+            except ValueError:
+                is_featured = None
+            queryset = queryset.filter(is_featured=is_featured)
+        queryset = queryset.order_by('created_at')  # or any other relevant field
+        return queryset
 class PublicProductVariantRetrieveAPIView(RetrieveAPIView):
     permission_classes=(AllowAny,)
     queryset=ProductVariant.objects.filter(is_active=True,show_in_ecommerce=True)
