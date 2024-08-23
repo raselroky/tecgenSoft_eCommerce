@@ -5,12 +5,13 @@ class ProductUnitSeriaizer(serializers.ModelSerializer):
     class Meta:
         model=ProductUnit
         fields='__all__'
-
+        
 
 class ProductVariantSeriaizer(serializers.ModelSerializer):
     class Meta:
         model=ProductVariant
         fields='__all__'
+        
 
 
 class ProductvariantAttributeSeriaizer(serializers.ModelSerializer):

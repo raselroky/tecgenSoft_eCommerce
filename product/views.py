@@ -17,12 +17,11 @@ from django.db.models import  Prefetch, F, Sum
 
 
 class ProductUnitListCreateAPIView(ListCreateAPIView):
-    permission_classes=(IsAuthenticated,)
-    queryset=ProductUnit.objects.all()
-    serializer_class=ProductUnitSeriaizer
+    permission_classes = (IsAuthenticated,)
+    queryset = ProductUnit.objects.all().order_by('-created_at')
+    serializer_class = ProductUnitSeriaizer
 
     def create(self, request, *args, **kwargs):
-        # Modify request data to include created_by
         data = request.data.copy()  # Create a mutable copy of request.data
         data['created_by'] = request.user.id
         serializer = self.get_serializer(data=data)

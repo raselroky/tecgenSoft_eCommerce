@@ -37,9 +37,11 @@ def create_tokens(user: User) -> Tuple[str, str]:
 
 
 from rest_framework_simplejwt.tokens import RefreshToken
-
-def generate_tokens_for_user(user):
+from datetime import timedelta
+def generate_tokens_for_user(user,expiration=None):
     refresh = RefreshToken.for_user(user)
+    if expiration:
+        refresh.set_exp(lifetime=timedelta(seconds=expiration))
     return {
         'access': str(refresh.access_token),
         'refresh': str(refresh)
