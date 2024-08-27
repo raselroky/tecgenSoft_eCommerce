@@ -37,6 +37,7 @@ class PaymentMethodOptions(models.TextChoices):
     ONLINE = 'online', 'online'
 
 class DiscountTypeChoices(models.TextChoices):
+    SELECT = 'SELECT', _('SELECT')
     FLAT = 'flat', _('flat')
     PERCENTAGE = 'percentage', _('percentage')
 
