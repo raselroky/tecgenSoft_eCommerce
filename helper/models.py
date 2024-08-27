@@ -37,7 +37,7 @@ class PaymentMethodOptions(models.TextChoices):
     ONLINE = 'online', 'online'
 
 class DiscountTypeChoices(models.TextChoices):
-    SELECT = 'SELECT', _('SELECT')
+    SELECT = 'select', _('select')
     FLAT = 'flat', _('flat')
     PERCENTAGE = 'percentage', _('percentage')
 
@@ -73,9 +73,6 @@ class OrderStatusOptions(models.TextChoices):
     COMPLETED = 'completed', 'completed'
     CANCELLED = 'cancelled', 'cancelled'
 
-class DiscountTypeChoices(models.TextChoices):
-    FLAT = 'flat', _('flat')
-    PERCENTAGE = 'percentage', _('percentage')
 
 class OrderItemStatusOptions(models.TextChoices):
     """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
@@ -85,10 +82,6 @@ class OrderItemStatusOptions(models.TextChoices):
     DELIVERED = 'delivered', 'delivered'
     CANCELLED = 'cancelled', 'cancelled'
     RETURNED = 'returned', 'returned'
-
-class DiscountTypeChoices(models.TextChoices):
-    FLAT = 'flat', _('flat')
-    PERCENTAGE = 'percentage', _('percentage')
 
 class OnlinePaymentMethodOptions(models.TextChoices):
     SSL_ECOMMERCE = 'ssl_ecommerce', 'ssl_ecommerce'

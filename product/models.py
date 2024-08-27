@@ -34,7 +34,7 @@ class ProductVariant(BaseModel):
     sub_category=models.ForeignKey(SubCategory,on_delete=models.CASCADE,null=True,blank=True)
     store=models.ForeignKey(Store,on_delete=models.CASCADE,null=True,blank=True)
     images = models.JSONField(default=list)
-    discount_type=models.CharField(max_length=500,choices=DiscountTypeChoices.choices,default='SELECT')
+    discount_type=models.CharField(max_length=500,choices=DiscountTypeChoices.choices,default='select')
     online_discount=models.FloatField(default=0)
     selling_price = models.FloatField(default=0)
     minimum_stock_quantity = models.PositiveIntegerField(default=0)
