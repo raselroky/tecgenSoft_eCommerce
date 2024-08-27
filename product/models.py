@@ -34,6 +34,7 @@ class ProductVariant(BaseModel):
     sub_category=models.ForeignKey(SubCategory,on_delete=models.CASCADE,null=True,blank=True)
     store=models.ForeignKey(Store,on_delete=models.CASCADE,null=True,blank=True)
     images = models.JSONField(default=list)
+    online_discount=models.FloatField(default=0)
     selling_price = models.FloatField(default=0)
     minimum_stock_quantity = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
