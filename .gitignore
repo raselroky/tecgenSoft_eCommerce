@@ -5,6 +5,8 @@ mediafiles/
 staticfiles/
 #media/
 staticfiles/
+static/
+*static/
 static_assets/
 #db.sqlite3
 shonali/local_settings.py
