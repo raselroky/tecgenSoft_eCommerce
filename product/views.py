@@ -192,14 +192,27 @@ class PublicProductVariantReviewretRieveAPIView(RetrieveAPIView):
 
 
 
+class PublicRecentNewlyProductVariantListAPIView(ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ProductVariantSeriaizer
+    search_fields = ['^name']
+    def get_queryset(self):
+        recent_date = now() - timedelta(days=15)
+        return ProductVariant.objects.filter(
+            is_active=True,
+            show_in_ecommerce=True,
+            created_at__gte=recent_date
+        ).order_by('-created_by')
+
+
 class PublicNewArrivalProductVariantListAPIView(ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ProductVariantSeriaizer
     search_fields = ['^name']
     def get_queryset(self):
-        recent_date = now() - timedelta(days=30)
+        #recent_date = now() - timedelta(days=30)
         return ProductVariant.objects.filter(
             is_active=True,
             show_in_ecommerce=True,
-            created_at__gte=recent_date
+            is_new_arrival=True
         ).order_by('-created_by')
