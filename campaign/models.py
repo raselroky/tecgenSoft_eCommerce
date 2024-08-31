@@ -58,7 +58,7 @@ class CampaignMember(BaseModel):
         ]
 
     def __str__(self):
-        return str(self.campaign.name)
+        return str(self.id)+' '+str(self.product_variant)
 
 
 class DealOfTheWeek(BaseModel):
@@ -84,6 +84,6 @@ class DealOfTheWeek(BaseModel):
         ]
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id)+' '+str(self.product_variant)
 
 

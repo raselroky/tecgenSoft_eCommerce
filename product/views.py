@@ -13,7 +13,12 @@ from rest_framework.request import Request
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.db.models import  Prefetch, F, Sum
+from django.utils.timezone import now,timedelta
+from campaign.models import Campaign,CampaignMember,DealOfTheWeek
+import logging
+from django.db.models import Min, Max, Sum, Q, Count, F, Prefetch, Avg
 
+logger = logging.getLogger('django')
 
 
 class ProductUnitListCreateAPIView(ListCreateAPIView):
@@ -182,3 +187,19 @@ class PublicProductVariantReviewretRieveAPIView(RetrieveAPIView):
     queryset=ProductVariantReview.objects.filter(is_active=True)
     serializer_class=ProductVariantReviewSeriaizer
     lookup_field='id'
+
+
+
+
+
+class PublicNewArrivalProductVariantListAPIView(ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ProductVariantSeriaizer
+    search_fields = ['^name']
+    def get_queryset(self):
+        recent_date = now() - timedelta(days=30)
+        return ProductVariant.objects.filter(
+            is_active=True,
+            show_in_ecommerce=True,
+            created_at__gte=recent_date
+        ).order_by('-created_by')

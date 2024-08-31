@@ -3,7 +3,7 @@ from product.views import (
     ProductUnitListCreateAPIView,ProductUnitRetrieveUpdateDestroyAPIView,ProductVariantListCreateAPIView,ProductVariantRetrieveUpdateDestroyListCreateAPIView,
     ProductVariantAttributeListCreateAPIView,ProductVariantAttributeRetrieveUpdateDestroyAPIView,ProductVariantReviewListCreateAPIView,ProductVariantReviewRetrieveUpdateDestroyAPIView,
     PublicProductVariantAttributeListAPIView,PublicProductVariantAttributeRetrieveAPIView,PublicProductVariantListAPIView,PublicProductVariantRetrieveAPIView,
-    PublicProductVariantReviewListAPIView,PublicProductVariantReviewretRieveAPIView
+    PublicProductVariantReviewListAPIView,PublicProductVariantReviewretRieveAPIView,PublicNewArrivalProductVariantListAPIView
     )
 
 
@@ -26,6 +26,10 @@ urlpatterns=[
     path('users-productvariant-attribute-retrieve/<int:id>',PublicProductVariantAttributeRetrieveAPIView.as_view(),name='user-product-variant-attribute-retrieve'),
     path('users-productvariant-review-list/',PublicProductVariantReviewListAPIView.as_view(),name='user-product-variant-review-list'),
     path('users-productvariant-review-retrieve/<int:id>',PublicProductVariantReviewretRieveAPIView.as_view(),name='user-product-variant-review-retrieve'),
+
+
+    # path('best-selling-products',PublicBestSellingProductVariantListAPIView.as_view(),name='best-selling-products-list-api'),
+    path('new-arrivals-products',PublicNewArrivalProductVariantListAPIView.as_view(),name='new-arrivals-products-list-api')
 
 
 

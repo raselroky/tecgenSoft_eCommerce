@@ -49,9 +49,12 @@ class ProductVariant(BaseModel):
     ordering = models.PositiveIntegerField(default=0)
     weight = models.FloatField(blank=True,null=True,help_text="Weight of this specific variant")
 
+    promo=models.CharField(max_length=1000,null=True,blank=True)
 
     def __str__(self) :
-        return str(self.id)
+        if self.name==None:
+            return str(self.id)
+        return str(self.name)
 
 
 class ProductVariantAttribute(BaseModel):

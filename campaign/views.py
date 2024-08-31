@@ -13,7 +13,7 @@ from rest_framework.request import Request
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.db.models import  Prefetch, F, Sum
-
+from helper.decorators import entries_to_remove
 
 class CampaignListCreateAPIView(ListCreateAPIView):
     permission_classes=(IsAuthenticated,)
@@ -23,9 +23,9 @@ class CampaignListCreateAPIView(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         # Modify request data to include created_by
         data = request.data.copy()  # Create a mutable copy of request.data
-        data['created_by'] = request.user.id
         if Campaign.objects.filter(name=request.data['name']):
             return Response({"message":"This name is already exist!"})
+        data['created_by'] = request.user.id
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -39,8 +39,15 @@ class CampaignRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=Campaign.objects.all()
     serializer_class=CampaignSerializer
+    removeable_keys = ('slug',)
     lookup_field='id'
 
+    def update(self, request, *args, **kwargs):
+        updated_request_data = entries_to_remove(self.request.data, self.removeable_keys)
+        self.request.data.update(updated_request_data)
+        self.request.data['updated_by'] = self.request.user.id
+        return super(CampaignRetrieveUpdateDestroyAPIView, self).update(request, *args, **kwargs)
+    
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
@@ -53,8 +60,7 @@ class CampaignMemberListCreateAPIView(ListCreateAPIView):
     serializer_class=CampaignMemberSerializer
 
     def create(self, request, *args, **kwargs):
-        # Modify request data to include created_by
-        data = request.data.copy()  # Create a mutable copy of request.data
+        data = request.data.copy()
         data['created_by'] = request.user.id
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -82,6 +88,18 @@ class DealOfTheWeekListCreateAPIView(ListCreateAPIView):
     queryset=DealOfTheWeek.objects.all()
     serializer_class=DealOfTheWeekSerializer
 
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+        
 class DealOfTheWeekRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=DealOfTheWeek.objects.all()

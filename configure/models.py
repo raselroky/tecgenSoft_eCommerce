@@ -1,6 +1,6 @@
 from django.db import models
-from helper.models import BaseModel
-
+from helper.models import BaseModel,DiscountTypeChoices
+from user.models import User
 
 class Banner(BaseModel):
     # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_banners',null=True,blank=True)
@@ -52,3 +52,46 @@ class Country(BaseModel):
             models.Index(fields=["currency_code"]),
             models.Index(fields=["code"]),
         ]
+
+
+
+
+
+
+
+class PlatformCoupon(models.Model):
+
+    status = models.BooleanField(default=False)
+    promo_code = models.CharField(max_length=1000, unique=True, null=True, blank=False)
+    discount_type = models.CharField(max_length=1000,choices=DiscountTypeChoices.choices,default='select')
+    promo_amount=models.FloatField(default=0)
+    
+    active_use_limit = models.BooleanField(default=False)
+    use_limit = models.IntegerField(default=0)
+    used = models.IntegerField(default=0)
+    
+
+    expire_date = models.DateTimeField(blank=True, null=True)
+    added = models.DateTimeField(auto_now_add=True)
+    
+
+    def __str__(self) :
+        return self.promo_code
+
+
+class MultipleAddress(BaseModel):
+    title=models.CharField(max_length=100,null=True,blank=True)
+    address=models.CharField(max_length=1000,null=True,blank=True)
+    number=models.CharField(max_length=14,null=True,blank=True)
+    is_active=models.BooleanField(default=False)
+    
+    
+    def __str__(self):
+        return self.title
+
+class AllUsedCoupon(models.Model):
+    order_invoice=models.CharField(max_length=1000,null=True,blank=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+
+    def __str__(self) :
+        return self.order_invoice

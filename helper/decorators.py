@@ -27,3 +27,8 @@ def exception_handler(func):
         except (ObjectDoesNotExist, Http404) as ex:
             return Response({'message': ex.__str__()}, status=status.HTTP_404_NOT_FOUND)
     return inner_function
+
+def entries_to_remove(data: dict, removeable_keys: tuple) -> dict:
+    for k in removeable_keys:
+        data.pop(k, None)
+    return data
