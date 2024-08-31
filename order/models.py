@@ -38,6 +38,7 @@ class Order(BaseModel):
     items_total_price = models.FloatField(default=0) #total price of items after deducting discount
     
     # discounts
+    promo_code=models.CharField(max_length=1000,null=True,blank=True)
     promo_deductable_amount = models.FloatField(default=0) #amount that has been decreased by using promo
     order_total_discount_amount = models.FloatField(default=0) #final discount of order including all type of discounts
 

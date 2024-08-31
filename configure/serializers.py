@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Banner,Country
+from .models import Banner,Country,MultipleAddress,PlatformCoupon,AllUsedCoupon
 
 class BannerSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
@@ -21,3 +21,17 @@ class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model=Country
         fields='__all__'
+
+class MultipleAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=MultipleAddress
+        fields= "__all__"
+
+class PlatformCouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=PlatformCoupon
+        fields= "__all__"
+class AllUsedCouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=AllUsedCoupon
+        fields= "__all__"
