@@ -5,8 +5,7 @@ from product.models import ProductVariant,ProductVariantAttribute,ProductUnit
 from store.models import Store,StorePaymentMethod
 from helper.models import BaseModel
 from django.contrib.auth import get_user_model
-User = get_user_model()
-
+from user.models import User
 
 class Order(BaseModel):
     # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
@@ -52,9 +51,9 @@ class Order(BaseModel):
     # total_tax_amount = models.FloatField(default=0)
 
     # advance_payment_percentage = models.FloatField(default=0)
-    # advance_payment = models.FloatField(default=0)
+    advance_payment = models.FloatField(default=0)
     # is_advance_payment_done = models.BooleanField(default=False)
-    # is_shipping_charge_added = models.BooleanField(default=False)
+    is_shipping_charge_added = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['-created_at']

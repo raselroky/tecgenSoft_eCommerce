@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import ProductUnit,ProductVariant,ProductVariantAttribute,ProductVariantReview
+from product.models import ProductUnit,ProductVariant,ProductVariantAttribute,ProductVariantReview,QuantityWiseProductVariantPrice
 from campaign.models import Campaign,CampaignMember,DealOfTheWeek
 from campaign.serializers import CampaignSerializer,CampaignMemberSerializer,DealOfTheWeekSerializer
 from helper.func_cal import get_overall_discount_calculated_values
@@ -111,3 +111,16 @@ class ProductVariantReviewSeriaizer(serializers.ModelSerializer):
         fields='__all__'
 
 
+class QunatityWisePriceSeriaizer(serializers.ModelSerializer):
+    class Meta:
+        model=QuantityWiseProductVariantPrice
+        fields='__all__'
+
+
+
+class ProductVariantMetaSerializer(serializers.ModelSerializer):
+    attributes = ProductvariantAttributeSeriaizer(source='productvariantattribute_set', read_only=True, many=True)
+
+    class Meta:
+        model = ProductVariant
+        fields = '__all__'

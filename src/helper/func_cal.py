@@ -1,5 +1,11 @@
 from campaign.models import CampaignMember,Campaign,DealOfTheWeek
-
+from typing import (
+    List, 
+    Callable,
+    Any, 
+    Type,
+    Dict
+)
 
 def get_overall_discount_calculated_values(obj,selling_price):
     discount=0
@@ -30,6 +36,23 @@ def get_overall_discount_calculated_values(obj,selling_price):
         return discount
     
     
+def entries_to_remove(data: dict, removeable_keys: tuple) -> dict:
+    for k in removeable_keys:
+        data.pop(k, None)
+    return data
 
+
+def remove_duplicate_from_list(iterable: List, key:  Callable = None) ->List:
+    if key is None:
+        def key(x): return x
+
+    seen = set()
+    for elem in iterable:
+        k = key(elem)
+        if k in seen:
+            continue
+
+        yield elem
+        seen.add(k)
 
 

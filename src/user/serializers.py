@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserLiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'contact_number', 'is_active']
+        fields = ['id','first_name', 'last_name', 'username', 'email', 'contact_number', 'is_active']
 
 class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:

@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from user.models import User
 from catalog.models import Category,SubCategory,Brand,Attribute,AttributeValue
 from helper.models import BaseModel,DiscountTypeChoices
-
+from configure.models import Country
 
 class ProductUnit(BaseModel):
     # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
@@ -102,3 +102,13 @@ class ProductVariantReview(BaseModel):
     def __str__(self):
         return str(self.rating)
     
+
+
+class QuantityWiseProductVariantPrice(BaseModel):
+    product_variant = models.ForeignKey(ProductVariant,on_delete=models.CASCADE,null=True,blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE,null=True,blank=True)
+    min_quantity = models.PositiveIntegerField(default=0)
+    selling_price = models.FloatField(default=0)
+    
+    def __str__(self):
+        return str(self.product_variant.id)+' '+str(self.country.name)

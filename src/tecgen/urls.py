@@ -23,7 +23,6 @@ schema_view=get_schema_view(
 )
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/',include("user.urls")),
@@ -32,6 +31,7 @@ urlpatterns = [
     path('campaign/',include('campaign.urls')),
     path('product/',include('product.urls')),
     path('configure/',include('configure.urls')),
+    path('order/',include('order.urls')),
     # path('auth/', include('rest_authtoken.urls')),
     
 

@@ -1,6 +1,6 @@
 from django.db import models
 from order.models import Order,OrderItem
-from helper.models import OnlinePaymentMethodOptions,OnlinePaymentStatusOptions
+from helper.models import OnlinePaymentMethodOptions,OnlinePaymentStatusOptions,PaymentMethodOptions
 from user.models import User
 from helper.models import BaseModel
 
@@ -30,3 +30,14 @@ class OnlinePayment(BaseModel):
 
     def __str__(self):
         return self.transaction_number
+
+class OrderPaymentModel(BaseModel):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE,null=True,blank=True)
+    paid_amount = models.FloatField(default=0)
+    
+    payment_method = models.CharField(max_length=30,choices=PaymentMethodOptions.choices)
+    online_payment = models.ForeignKey(OnlinePayment, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    def __str__(self):
+        return self.order.invoice_no

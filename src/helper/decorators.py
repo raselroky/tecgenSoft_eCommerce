@@ -3,6 +3,7 @@ from django.http.response import Http404
 from rest_framework import status
 from rest_framework.response import Response
 import random
+from rest_framework.exceptions import APIException
 
 def identifier_builder(table_name: str, prefix: str = None) -> str:
     with connection.cursor() as cur:
@@ -32,3 +33,10 @@ def entries_to_remove(data: dict, removeable_keys: tuple) -> dict:
     for k in removeable_keys:
         data.pop(k, None)
     return data
+
+
+
+class UnprocessableEntity(APIException):
+    status_code = 406
+    default_code = 406
+    default_detail = 'unprocessable entity'
