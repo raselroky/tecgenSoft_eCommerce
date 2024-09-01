@@ -89,7 +89,7 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
             module='online_discount'
         return {
             'updated_selling_price':price,
-            "apply":module
+            "live":module
         }
     class Meta:
         model=ProductVariant
