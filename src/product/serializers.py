@@ -27,6 +27,7 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
             elif campaign_member_get.discount_type=='percentage':
                 amount=float(campaign_member_get.discount_value/100)
             return {
+                "id":campaign_member_get.id,
                 "campaign":campaign_member_get.campaign.name,
                 "discount_type":campaign_member_get.discount_type,
                 "discount_value":campaign_member_get.discount_value,
@@ -54,7 +55,7 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
             elif deals_get.discount_type=='percentage':
                 amount=obj.selling_price*float(deals_get.discount_value/100)
             return {
-                "deals_of_the_week":deals_get.id,
+                "id":deals_get.id,
                 "discount_type":deals_get.discount_type,
                 "discount_value":deals_get.discount_value,
                 "calculate_amount":amount,
@@ -94,6 +95,7 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
     class Meta:
         model=ProductVariant
         fields='__all__'
+        
         
 
 
