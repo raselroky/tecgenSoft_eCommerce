@@ -1,16 +1,20 @@
 version: "3"
 
 services:
+  redis:
+    image: redis:5-alpine
+    ports:
+      - 6378:6379
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    
     volumes:
-      - ./tecgen:/app/tecgen
-    command: bash -c "cd tecgen && python manage.py runserver 0.0.0.0:8000"
-    expose:
-      - 8000
+      - ./src:/app/src
+    command: bash -c "cd src && python manage.py runserver 0.0.0.0:8000"
+    ports:
+    - "8000:8000"
     env_file:
       - .env
 
@@ -20,8 +24,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./tecgen/nginx:/etc/nginx/conf.d
-      - ./tecgen/static:/app/tecgen/static
+    - ./src/nginx:/etc/nginx/conf.d
+    - ./src/static:/app/src/static
     depends_on:
       - "app"
 
