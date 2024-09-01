@@ -3,10 +3,12 @@ db/
 __pycache__/
 mediafiles/
 staticfiles/
-media/
+#media/
 staticfiles/
+static/
+*static/
 static_assets/
-db.sqlite3
+#db.sqlite3
 shonali/local_settings.py
 Project_Default.xml
 .idea/vcs.xml
