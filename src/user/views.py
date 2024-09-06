@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIView,RetrieveUpdateDestroyAPIView
-from user.models import UserAddress
+from user.models import UserAddress,User
 from user.serializers import UserSerializer,UserAddressSerializer,UserTokenSerializer
 from rest_framework.views import APIView
 from helper.tokens import create_tokens,generate_tokens_for_user
@@ -24,7 +24,6 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
 
 class UserListCreateAPIView(APIView):
 
@@ -173,5 +172,41 @@ class Logout(APIView):
 
 
 
+class ForgetPassword(APIView):
+    permission_classes=(AllowAny,)
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username or contact number of the user'),
+                'date_of_birth': openapi.Schema(type=openapi.TYPE_STRING, description='date_of_birth of the user'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password of the user'),
+            },
+            required=['username','date_of_birth', 'password']
+        ),
+        responses={
+            201: openapi.Response('New password set successful', UserTokenSerializer),
+            400: 'Invalid input',
+            403: 'Inactive account',
+            404: "User Doesn't exist"
+        }
+    )
+    def post(self,request):
+        username=request.data['username']
+        
+        usr=User.objects.filter(username=username)
+        if usr.exists():
+            date_of_birth=request.data['date_of_birth']
+            usr1=User.objects.filter(username=username,date_of_birth=date_of_birth)
+            if usr1.exists():
+                usr2=User.objects.filter(username=username,date_of_birth=date_of_birth).first()
+                password=request.data['password']
 
+                usr2.password=password
+                usr2.save()
+                return Response({"message":"Successfully set new Passowrd."},status=status.HTTP_200_OK)
+            return Response({"message":"Date of Birth not correct,try again."},status=status.HTTP_404_NOT_FOUND)
+        return Response({"message":"user doesn't exist,try again."},status=status.HTTP_404_NOT_FOUND)
+
+        
