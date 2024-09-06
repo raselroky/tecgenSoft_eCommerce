@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-0&g$tv&6-c!cy)rjbp_%4h19jlw!sby9h(e7tmqwqzsyhb99i*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*','www.tecgendsoft.com','tecgensoft.com','tecgen-backend-production.up.railway.app']
+ALLOWED_HOSTS = ['*','www.tecgensoft.com','tecgensoft.com','tecgen-backend-production.up.railway.app']
 
 
 # Application definition
