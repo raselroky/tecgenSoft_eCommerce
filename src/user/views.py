@@ -201,9 +201,9 @@ class ForgetPassword(APIView):
             usr1=User.objects.filter(username=username,date_of_birth=date_of_birth)
             if usr1.exists():
                 usr2=User.objects.filter(username=username,date_of_birth=date_of_birth).first()
-                password=request.data['password']
+                new_password=request.data['new_password']
 
-                usr2.password=password
+                usr2.password=new_password
                 usr2.save()
                 return Response({"message":"Successfully set new Passowrd."},status=status.HTTP_200_OK)
             return Response({"message":"Date of Birth not correct,try again."},status=status.HTTP_404_NOT_FOUND)
