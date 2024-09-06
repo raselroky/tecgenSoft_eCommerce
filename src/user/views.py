@@ -181,9 +181,9 @@ class ForgetPassword(APIView):
             properties={
                 'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username or contact number of the user'),
                 'date_of_birth': openapi.Schema(type=openapi.TYPE_STRING, description='date_of_birth of the user'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password of the user'),
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING, description='Password of the user'),
             },
-            required=['username','date_of_birth', 'password']
+            required=['username','date_of_birth', 'new_password']
         ),
         responses={
             201: openapi.Response('New password set successful', UserTokenSerializer),
