@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0&g$tv&6-c!cy)rjbp_%4h19jlw!sby9h(e7tmqwqzsyhb99i*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*','www.tecgensoft.com','tecgensoft.com','tecgen-backend-production.up.railway.app']
+ALLOWED_HOSTS = ['www.tecgensoft.com','tecgensoft.com','tecgen-backend-production.up.railway.app']
 
 
 # Application definition
@@ -194,7 +194,7 @@ CACHES = {
     }
 }
 
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True
 
 # SSL_STORE_ID='shobl656ef44d52976'
 # SSL_STORE_PASSWORD='shobl656ef44d52976@ssl'
