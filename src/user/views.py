@@ -181,7 +181,7 @@ class ForgetPassword(APIView):
             properties={
                 'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username or contact number of the user'),
                 'date_of_birth': openapi.Schema(type=openapi.TYPE_STRING, description='date_of_birth of the user'),
-                'new_password': openapi.Schema(type=openapi.TYPE_STRING, description='Password of the user'),
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING, description='New Password of the user'),
             },
             required=['username','date_of_birth', 'new_password']
         ),
