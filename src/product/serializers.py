@@ -22,6 +22,23 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
         productvariant_attributes=ProductVariantAttribute.objects.filter(product_variant__id=obj.id)
         if productvariant_attributes.exists():
             return ProductvariantAttributeSeriaizer(productvariant_attributes,many=True).data
+            # productvariant_attributes_get=ProductVariantAttribute.objects.filter(product_variant__id=obj.id).first()
+            # return {
+            #     "id":productvariant_attributes_get.id,
+            #     "price_increment":productvariant_attributes_get.price_increment,
+            #     "is_active":productvariant_attributes_get.is_active,
+            #     "product_variant_id":productvariant_attributes_get.product_variant.id,
+            #     "product_variant_name":productvariant_attributes_get.product_variant.name,
+            #     "attribute_id":productvariant_attributes_get.attribute.id,
+            #     "attribute_name":productvariant_attributes_get.attribute.name,
+            #     "attribute_value_id":productvariant_attributes_get.attribute_value.id,
+            #     "attribute_value_name":productvariant_attributes_get.attribute_value.name,
+            #     "created_by_id":productvariant_attributes_get.created_by.id,
+            #     "created_by_username":productvariant_attributes_get.created_by.username,
+            #     "created_at":productvariant_attributes_get.created_at
+
+
+            #     }
         return None
 
     def get_campaign(self,obj):
@@ -103,14 +120,37 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
     class Meta:
         model=ProductVariant
         fields='__all__'
-        
+       
+       
         
 
 
 class ProductvariantAttributeSeriaizer(serializers.ModelSerializer):
+    attribute=serializers.SerializerMethodField()
+    attribute_value=serializers.SerializerMethodField()
+    #product_variant=serializers.SerializerMethodField()
+
+    def get_attribute(slef,obj):
+        
+        return {
+            "id":obj.attribute.id,
+            "name":obj.attribute.name
+        }
+    def get_attribute_value(slef,obj):
+         return {
+            "id":obj.attribute_value.id,
+            "name":obj.attribute_value.name
+        }
+    # def get_product_variant(self,obj):
+        
+    #     return{
+    #         "id":obj.product_variant.id,
+    #         "name":obj.product_variant.name
+    #     }
     class Meta:
         model=ProductVariantAttribute
         fields='__all__'
+        
 
 
 class ProductVariantReviewSeriaizer(serializers.ModelSerializer):
