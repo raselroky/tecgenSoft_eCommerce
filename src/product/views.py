@@ -159,6 +159,7 @@ class PublicProductVariantListAPIView(ListAPIView):
             queryset = queryset.filter(is_featured=is_featured)
         queryset = queryset.order_by('created_at')  # or any other relevant field
         return queryset
+    
 class PublicProductVariantRetrieveAPIView(RetrieveAPIView):
     permission_classes=(AllowAny,)
     queryset=ProductVariant.objects.filter(is_active=True,show_in_ecommerce=True)
