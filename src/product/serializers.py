@@ -18,6 +18,7 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
     updated_selling_price=serializers.SerializerMethodField()
 
     def get_campaign(self,obj):
+        
         campaign_member=CampaignMember.objects.filter(id=obj.id)
         amount=0.0
         if campaign_member.exists():
@@ -33,8 +34,8 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
                 "discount_value":campaign_member_get.discount_value,
                 "calculate_amount":amount,
                 "product_price_with":get_overall_discount_calculated_values(obj.id,obj.selling_price),
-                "start_date":campaign_member_get.start_date,
-                "end_date":campaign_member_get.end_date,
+                "start_date":campaign_member_get.campaign.start_date,
+                "end_date":campaign_member_get.campaign.end_date,
                 "created_by":{
                     'id':campaign_member_get.created_by.id,
                     'username':campaign_member_get.created_by.username,
