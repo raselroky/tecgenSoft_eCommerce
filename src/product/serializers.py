@@ -16,6 +16,13 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
     deals_of_the_week=serializers.SerializerMethodField()
     # online_discount=serializers.SerializerMethodField()
     updated_selling_price=serializers.SerializerMethodField()
+    productvariant_attribute=serializers.SerializerMethodField()
+
+    def get_productvariant_attribute(self,obj):
+        productvariant_attributes=ProductVariantAttribute.objects.filter(product_variant__id=obj.id)
+        if productvariant_attributes.exists():
+            return ProductvariantAttributeSeriaizer(productvariant_attributes,many=True).data
+        return None
 
     def get_campaign(self,obj):
         
