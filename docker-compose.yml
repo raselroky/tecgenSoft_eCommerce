@@ -14,7 +14,7 @@ services:
       - ./src:/app/src
     command: bash -c "cd src && python manage.py runserver 0.0.0.0:8000"
     ports:
-    - "8000:8000"
+      - "8000:8000"
     env_file:
       - .env
 
@@ -24,8 +24,8 @@ services:
     ports:
       - "80:80"
     volumes:
-    - ./src/nginx:/etc/nginx/conf.d
-    - ./src/static:/app/src/static
+      - ./src/nginx:/etc/nginx/conf.d
+      - ./src/static:/app/src/static
     depends_on:
       - "app"
 
