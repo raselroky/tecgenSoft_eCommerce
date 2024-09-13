@@ -17,6 +17,7 @@ from django.utils.timezone import now,timedelta
 from campaign.models import Campaign,CampaignMember,DealOfTheWeek
 import logging
 from django.db.models import Min, Max, Sum, Q, Count, F, Prefetch, Avg
+from helper.decorators import entries_to_remove
 
 logger = logging.getLogger('django')
 
@@ -68,11 +69,47 @@ class ProductVariantListCreateAPIView(ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-class ProductVariantRetrieveUpdateDestroyListCreateAPIView(RetrieveUpdateDestroyAPIView):
+class ProductVariantRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=ProductVariant.objects.all()
     serializer_class=ProductVariantSeriaizer
     lookup_field='id'
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data.copy()  # This makes the QueryDict mutable
+
+        # Remove unwanted keys and add 'updated_by'
+        # updated_request_data = entries_to_remove(data, self.removeable_keys)
+        # data.update(updated_request_data)
+
+        product_id = instance.id
+        
+        if product_id:
+            deal=DealOfTheWeek.objects.filter(product_variant__id=product_id)
+            campaign=CampaignMember.objects.filter(product_variant__id=product_id)
+            if campaign:
+                campaign=CampaignMember.objects.filter(product_variant__id=product_id).first()
+            else:
+                campaign=None
+            if deal:
+                deal=DealOfTheWeek.objects.filter(product_variant__id=product_id).first()
+            else:
+                deal=None
+            if( campaign or deal):
+                return Response(
+                    {"detail": "Cannot add online_discount as the product has an active deal-of-the-week or campaign."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+        data['updated_by'] = self.request.user.id
+
+        # Pass the mutable data to the serializer
+        serializer = self.get_serializer(instance=self.get_object(), data=data, partial=kwargs.get('partial', False))
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
