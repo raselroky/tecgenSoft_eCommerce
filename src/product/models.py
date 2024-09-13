@@ -6,6 +6,7 @@ from user.models import User
 from catalog.models import Category,SubCategory,Brand,Attribute,AttributeValue
 from helper.models import BaseModel,DiscountTypeChoices
 from configure.models import Country
+from django.forms.models import model_to_dict
 
 class ProductUnit(BaseModel):
     # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
@@ -55,6 +56,7 @@ class ProductVariant(BaseModel):
         if self.name==None:
             return str(self.id)
         return str(self.name)
+        
 
 
 class ProductVariantAttribute(BaseModel):

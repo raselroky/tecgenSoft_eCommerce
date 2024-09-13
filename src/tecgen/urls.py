@@ -32,6 +32,7 @@ urlpatterns = [
     path('product/',include('product.urls')),
     path('configure/',include('configure.urls')),
     path('order/',include('order.urls')),
+    path('stock/',include('stock.urls')),
     # path('auth/', include('rest_authtoken.urls')),
     
 
