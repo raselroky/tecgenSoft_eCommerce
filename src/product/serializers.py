@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import ProductUnit,ProductVariant,ProductVariantAttribute,ProductVariantReview,QuantityWiseProductVariantPrice,CountryWiseProductVariant,CartItem
+from product.models import ProductUnit,ProductVariant,ProductVariantAttribute,ProductVariantReview,QuantityWiseProductVariantPrice,CountryWiseProductVariant
 from campaign.models import Campaign,CampaignMember,DealOfTheWeek
 from campaign.serializers import CampaignSerializer,CampaignMemberSerializer,DealOfTheWeekSerializer
 from helper.func_cal import get_overall_discount_calculated_values
@@ -173,10 +173,7 @@ class ProductVariantMetaSerializer(serializers.ModelSerializer):
         model = ProductVariant
         fields = '__all__'
 
-class CartItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=CartItem
-        fields='__all__'
+
 
 class CountryWiseProductVariantSerializer(serializers.ModelSerializer):
     class Meta:

@@ -48,6 +48,13 @@ class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 
 
+
+class UserCateogryAllListAPIView(ListAPIView):
+    permission_classes=[AllowAny,]
+    queryset=Category.objects.all()
+    serializer_class=CategorySerializer
+
+
 class SubCategoryListCreateAPIView(ListCreateAPIView):
     permission_classes=[IsAuthenticated,]
     queryset=SubCategory.objects.all()
@@ -79,6 +86,10 @@ class SubCategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         self.perform_destroy(instance)
         return Response({"message": "SubCategory deleted successfully."}, status=status.HTTP_200_OK)
 
+class UserSubCateogryAllListAPIView(ListAPIView):
+    permission_classes=[AllowAny,]
+    queryset=SubCategory.objects.all()
+    serializer_class=SubCategorySerializer
 
 
 class BrandListCreateAPIView(ListCreateAPIView):
@@ -112,6 +123,11 @@ class BrandRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         self.perform_destroy(instance)
         return Response({"message": "Brand deleted successfully."}, status=status.HTTP_200_OK)
 
+
+class UserBrandAllListAPIView(ListAPIView):
+    permission_classes=[AllowAny,]
+    queryset=Brand.objects.all()
+    serializer_class=BrandSerializer
 
 
 class PublicAllCategoryListAPIView(ListAPIView):

@@ -128,17 +128,3 @@ class CountryWiseProductVariant(BaseModel):
     def __str__(self):
         return str(self.product_variant.name)+' '+str(self.country.name)
 
-
-
-class CartItem(BaseModel):
-    product_variant=models.ForeignKey(ProductVariant,on_delete=models.CASCADE,null=True,blank=True)
-    
-
-    class Meta:
-        ordering = ['-created_at']
-        db_table = 'cart_item'
-        indexes = [
-            models.Index(fields=['-created_at']),
-        ]
-    def __str__(self):
-        return str(self.product_variant.id)
