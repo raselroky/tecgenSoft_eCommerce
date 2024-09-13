@@ -3,7 +3,8 @@ from product.views import (
     ProductUnitListCreateAPIView,ProductUnitRetrieveUpdateDestroyAPIView,ProductVariantListCreateAPIView,ProductVariantRetrieveUpdateDestroyAPIView,
     ProductVariantAttributeListCreateAPIView,ProductVariantAttributeRetrieveUpdateDestroyAPIView,ProductVariantReviewListCreateAPIView,ProductVariantReviewRetrieveUpdateDestroyAPIView,
     PublicProductVariantAttributeListAPIView,PublicProductVariantAttributeRetrieveAPIView,PublicProductVariantListAPIView,PublicProductVariantRetrieveAPIView,
-    PublicProductVariantReviewListAPIView,PublicProductVariantReviewretRieveAPIView,PublicNewArrivalProductVariantListAPIView,PublicRecentNewlyProductVariantListAPIView
+    PublicProductVariantReviewListAPIView,PublicProductVariantReviewretRieveAPIView,PublicNewArrivalProductVariantListAPIView,PublicRecentNewlyProductVariantListAPIView,
+    UserCartItemListCreateAPIView,UserCartItemListRetrieveUpdateDestroyAPIView
     )
 
 
@@ -32,7 +33,8 @@ urlpatterns=[
     path('new-arrivals-products',PublicNewArrivalProductVariantListAPIView.as_view(),name='new-arrivals-products-list-api'),
     path('recent-newly-products',PublicRecentNewlyProductVariantListAPIView.as_view(),name='newly-recent-products-list-api'),
 
-
+    path('users-cart-create/',UserCartItemListCreateAPIView.as_view(),name='user-cart-create-api'),
+    path('users-cart-retrieve-update-destroy/<int:id>',UserCartItemListRetrieveUpdateDestroyAPIView.as_view(),name='user-cart-retrieve-update-destroy-api'),
 
 
 ]

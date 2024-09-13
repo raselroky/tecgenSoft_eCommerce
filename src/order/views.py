@@ -21,13 +21,13 @@ from campaign.models import Campaign,CampaignMember,DealOfTheWeek
 import logging
 from django.db.models import Min, Max, Sum, Q, Count, F, Prefetch, Avg
 from helper.decorators import UnprocessableEntity
-from helper.func_cal import remove_duplicate_from_list,entries_to_remove
+from helper.func_cal import remove_duplicate_from_list,entries_to_remove,handle_stock_out
 from django.db import transaction
 from configure.models import PlatformCoupon
 
 
 class UserOrderCreateListCreateAPIView(ListCreateAPIView):
-    permission_classes=(IsAuthenticated,)
+    permission_classes=(AllowAny,)
     queryset=Order.objects.all()
     serializer_class=OrderCreateSerializer
 
@@ -86,6 +86,8 @@ class UserOrderCreateListCreateAPIView(ListCreateAPIView):
             order_items_serializer = OrderItemCreateSerializer(data=requested_data['sell_order_items'], many=True)
             order_items_serializer.is_valid(raise_exception=True)
             order_items_serializer.save()
+            
+            handle_stock_out(returned_dict['items_stock_update_mapped_data_list'])
 
             
                      
@@ -104,7 +106,6 @@ class UserOrderCreateListCreateAPIView(ListCreateAPIView):
         
 
         
-
         return Response({"payment_type":order.payment_type, 'invoice_no': order.invoice_no}, status=status.HTTP_201_CREATED)
         
 
@@ -113,7 +114,7 @@ class UserOrderCreateListCreateAPIView(ListCreateAPIView):
 class UserOnlineOrderListAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = SellItemListLiteSerializer
-    queryset = Order.objects.select_related('customer', 'created_by', 'updated_by', 'terms_conditions').prefetch_related('orderitem_set').order_by('-created_at')
+    queryset = Order.objects.filter().order_by('-created_at')
     
     def get_queryset(self):
-        return super().get_queryset().filter(created_by=self.request.user)
+        return super().get_queryset().filter(created_by=self.request.user.id)

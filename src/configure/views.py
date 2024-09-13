@@ -45,7 +45,7 @@ class BannerListCreateAPIView(ListCreateAPIView):
 
     def perform_create(self, serializer):
          
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by=self.request.user.id)
        
 
 
@@ -86,7 +86,7 @@ class CountryListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by=self.request.user.id)
 
 class CountryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
@@ -130,7 +130,7 @@ class MultipleAddressListCreateAPIView(ListCreateAPIView):
     
     def get_queryset(self):
         #print(self.request.user)
-        return MultipleAddress.objects.filter(created_by=self.request.user)
+        return MultipleAddress.objects.filter(created_by=self.request.user.id)
 class MultipleAddressAllListAPIView(ListAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=MultipleAddress.objects.all()
@@ -138,7 +138,7 @@ class MultipleAddressAllListAPIView(ListAPIView):
     
     
     def get_queryset(self):
-        return MultipleAddress.objects.filter(created_by=self.request.user)
+        return MultipleAddress.objects.filter(created_by=self.request.user.id)
 
 class MultipleAddressRetreiveUpdateDestroyListAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
