@@ -45,7 +45,7 @@ class BannerListCreateAPIView(ListCreateAPIView):
 
     def perform_create(self, serializer):
          
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
        
 
 
@@ -86,7 +86,7 @@ class CountryListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class CountryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
@@ -117,7 +117,7 @@ class MultipleAddressListCreateAPIView(ListCreateAPIView):
     
     
     def create(self, request, *args, **kwargs):
-        request.data['created_by'] = request.user.pk  # Save user's primary key
+        request.data['created_by'] = request.user.id  # Save user's primary key
 
         # Create a serializer instance with the modified request data
         serializer = self.get_serializer(data=request.data)
@@ -128,9 +128,12 @@ class MultipleAddressListCreateAPIView(ListCreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+        
     def get_queryset(self):
         #print(self.request.user)
-        return MultipleAddress.objects.filter(created_by=self.request.user)
+        return MultipleAddress.objects.filter(created_by=self.request.user.id)
 class MultipleAddressAllListAPIView(ListAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=MultipleAddress.objects.all()
@@ -138,7 +141,7 @@ class MultipleAddressAllListAPIView(ListAPIView):
     
     
     def get_queryset(self):
-        return MultipleAddress.objects.filter(created_by=self.request.user)
+        return MultipleAddress.objects.filter(created_by=self.request.user.id)
 
 class MultipleAddressRetreiveUpdateDestroyListAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)

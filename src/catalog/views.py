@@ -33,7 +33,7 @@ class CategoryListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=[IsAuthenticated,]
@@ -73,7 +73,7 @@ class SubCategoryListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class SubCategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=[IsAuthenticated,]
@@ -110,7 +110,7 @@ class BrandListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class BrandRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=[IsAuthenticated,]
@@ -158,7 +158,7 @@ class AttributeListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 
 class AttributeRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -194,7 +194,7 @@ class AttributevalueListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class AttributevalueRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=[IsAuthenticated,]

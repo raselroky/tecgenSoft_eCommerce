@@ -37,7 +37,7 @@ class ProductUnitListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class ProductUnitRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
@@ -67,7 +67,7 @@ class ProductVariantListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class ProductVariantRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
@@ -133,7 +133,7 @@ class ProductVariantAttributeListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class ProductVariantAttributeRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
@@ -162,7 +162,7 @@ class ProductVariantReviewListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class ProductVariantReviewRetrieveUpdateDestroyAPIView(ListCreateAPIView):
     permission_classes=(IsAuthenticated,)

@@ -47,10 +47,10 @@ class UserCartItemListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
     
     def get_queryset(self):
-        qs=CartItem.objects.filter(created_by=self.request.user)
+        qs=CartItem.objects.filter(created_by=self.request.user.id)
         return qs
 
 
@@ -61,7 +61,7 @@ class UserCartItemListRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView)
     lookup_field='id'
     
     def get_queryset(self):
-        qs=CartItem.objects.filter(created_by=self.request.user)
+        qs=CartItem.objects.filter(created_by=self.request.user.id)
         return qs
 
     def destroy(self, request, *args, **kwargs):

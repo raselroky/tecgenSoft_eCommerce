@@ -32,9 +32,10 @@ class CampaignListCreateAPIView(ListCreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class CampaignRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
@@ -94,7 +95,7 @@ class CampaignMemberListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
 
 class CampaignMemberRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
@@ -164,7 +165,7 @@ class DealOfTheWeekListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user.id)
+        serializer.save(created_by=self.request.user)
         
 class DealOfTheWeekRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
