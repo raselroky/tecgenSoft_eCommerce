@@ -117,4 +117,4 @@ class UserOnlineOrderListAPIView(ListAPIView):
     queryset = Order.objects.filter().order_by('-created_at')
     
     def get_queryset(self):
-        return super().get_queryset().filter(created_by=self.request.user.id)
+        return super().get_queryset().filter(created_by=self.request.user)

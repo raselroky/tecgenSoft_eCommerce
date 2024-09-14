@@ -130,7 +130,7 @@ class MultipleAddressListCreateAPIView(ListCreateAPIView):
     
     def get_queryset(self):
         #print(self.request.user)
-        return MultipleAddress.objects.filter(created_by=self.request.user.id)
+        return MultipleAddress.objects.filter(created_by=self.request.user)
 class MultipleAddressAllListAPIView(ListAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=MultipleAddress.objects.all()
@@ -138,7 +138,7 @@ class MultipleAddressAllListAPIView(ListAPIView):
     
     
     def get_queryset(self):
-        return MultipleAddress.objects.filter(created_by=self.request.user.id)
+        return MultipleAddress.objects.filter(created_by=self.request.user)
 
 class MultipleAddressRetreiveUpdateDestroyListAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)

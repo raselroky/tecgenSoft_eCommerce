@@ -50,7 +50,7 @@ class UserWishlistListCreateAPIView(ListCreateAPIView):
         serializer.save(created_by=self.request.user.id)
     
     def get_queryset(self):
-        qs=Wishlist.objects.filter(created_by=self.request.user.id)
+        qs=Wishlist.objects.filter(created_by=self.request.user)
         return qs
 
 
@@ -62,7 +62,7 @@ class UserWislistListRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     lookup_field='id'
     
     def get_queryset(self):
-        qs=Wishlist.objects.filter(created_by=self.request.user.id)
+        qs=Wishlist.objects.filter(created_by=self.request.user)
         return qs
 
     def destroy(self, request, *args, **kwargs):
