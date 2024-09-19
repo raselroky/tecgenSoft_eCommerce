@@ -52,7 +52,7 @@ class ProductUnitRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 
 class ProductVariantListCreateAPIView(ListCreateAPIView):
-    permission_classes=(IsAuthenticated,)
+    permission_classes=(AllowAny,)
     queryset=ProductVariant.objects.all()
     serializer_class=ProductVariantSeriaizer
 
@@ -70,7 +70,7 @@ class ProductVariantListCreateAPIView(ListCreateAPIView):
         serializer.save(created_by=self.request.user)
 
 class ProductVariantRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    permission_classes=(IsAuthenticated,)
+    permission_classes=(AllowAny,)
     queryset=ProductVariant.objects.all()
     serializer_class=ProductVariantSeriaizer
     lookup_field='id'
@@ -254,6 +254,4 @@ class PublicNewArrivalProductVariantListAPIView(ListAPIView):
             show_in_ecommerce=True,
             is_new_arrival=True
         ).order_by('-created_by')
-
-
 

@@ -115,7 +115,7 @@ class Login(APIView):
             #     'access_token': access_token,
             #     'refresh_token': refresh_token,
             # }
-            token=generate_tokens_for_user(user,expiration=24*60*60)
+            token=generate_tokens_for_user(user,expiration=2*24*60*60)
             data = {
                 'token': token,
                 'username': user.username,
@@ -123,7 +123,7 @@ class Login(APIView):
                 }
             
             cache_key = f'{user.username}_token_data'
-            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=24*60*60)
+            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=2*24*60*60)
            
             cached_data = get_cache(cache_key)
 
@@ -210,3 +210,8 @@ class ForgetPassword(APIView):
         return Response({"message":"user doesn't exist,try again."},status=status.HTTP_404_NOT_FOUND)
 
         
+
+
+
+
+

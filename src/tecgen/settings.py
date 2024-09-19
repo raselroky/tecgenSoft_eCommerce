@@ -219,4 +219,5 @@ CACHES = {
 # BACKEND_BASE_URL='http://192.168.68.130'
 
 
+
 AUTH_USER_MODEL = 'user.User'

@@ -59,6 +59,8 @@ class ProductVariant(BaseModel):
         
 
 
+
+
 class ProductVariantAttribute(BaseModel):
     # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
     # updated_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='updated_%(class)ss',null=True,blank=True)

@@ -3,7 +3,8 @@ from product.models import ProductUnit,ProductVariant,ProductVariantAttribute,Pr
 from campaign.models import Campaign,CampaignMember,DealOfTheWeek
 from campaign.serializers import CampaignSerializer,CampaignMemberSerializer,DealOfTheWeekSerializer
 from helper.func_cal import get_overall_discount_calculated_values
-
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 class ProductUnitSeriaizer(serializers.ModelSerializer):
     class Meta:
@@ -17,6 +18,7 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
     # online_discount=serializers.SerializerMethodField()
     updated_selling_price=serializers.SerializerMethodField()
     productvariant_attribute=serializers.SerializerMethodField()
+
 
     def get_productvariant_attribute(self,obj):
         productvariant_attributes=ProductVariantAttribute.objects.filter(product_variant__id=obj.id)
@@ -120,6 +122,9 @@ class ProductVariantSeriaizer(serializers.ModelSerializer):
     class Meta:
         model=ProductVariant
         fields='__all__'
+    
+
+
        
        
         

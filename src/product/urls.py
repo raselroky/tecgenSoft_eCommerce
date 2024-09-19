@@ -5,6 +5,7 @@ from product.views import (
     PublicProductVariantAttributeListAPIView,PublicProductVariantAttributeRetrieveAPIView,PublicProductVariantListAPIView,PublicProductVariantRetrieveAPIView,
     PublicProductVariantReviewListAPIView,PublicProductVariantReviewretRieveAPIView,PublicNewArrivalProductVariantListAPIView,PublicRecentNewlyProductVariantListAPIView,
 
+
     )
 
 
@@ -35,6 +36,8 @@ urlpatterns=[
 
     # path('users-cart-create/',UserCartItemListCreateAPIView.as_view(),name='user-cart-create-api'),
     # path('users-cart-retrieve-update-destroy/<int:id>',UserCartItemListRetrieveUpdateDestroyAPIView.as_view(),name='user-cart-retrieve-update-destroy-api'),
+
+
 
 
 ]
