@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
-    #'rest_framework.authtoken',
+    'rest_framework',
+    'rest_framework.authtoken',
     'drf_yasg',
     'corsheaders',
     'helper',
@@ -183,7 +184,6 @@ CORS_ALLOW_METHODS = [
     'PATCH',
     'POST',
     'PUT',
-    'UPDATE'
 ]
 CSRF_TRUSTED_ORIGINS=["https://www.tecgensoft.com/"]
 

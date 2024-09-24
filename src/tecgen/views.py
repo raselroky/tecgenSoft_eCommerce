@@ -21,6 +21,8 @@ import logging
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
+import os
+from urllib.parse import urlparse
 
 ###
 from django.conf import settings
@@ -42,3 +44,33 @@ class ImageUploadView(APIView):
 
         image_url = f'{request.build_absolute_uri(settings.MEDIA_URL)}{file_name}'
         return Response({'image_url': image_url}, status=status.HTTP_200_OK)
+
+class ImageDeleteView(APIView):
+    permission_classes = (AllowAny,)
+
+    def delete(self, request, *args, **kwargs):
+        image_url = request.data.get('image_url')
+
+        if not image_url:
+            return Response({'error': 'No image URL provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Extract the image file name from the URL
+        try:
+            parsed_url = urlparse(image_url)
+            image_name = os.path.basename(parsed_url.path)
+        except Exception as e:
+            return Response({'error': 'Invalid image URL'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Construct the full path of the image
+        image_path = os.path.join(settings.MEDIA_ROOT, image_name)
+
+        # Check if the file exists
+        if os.path.exists(image_path):
+            try:
+                os.remove(image_path)
+                return Response({'message': f'Image {image_name} deleted successfully.'}, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({'error': f'Error deleting file: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({'error': 'Image not found'}, status=status.HTTP_404_NOT_FOUND)
+
