@@ -103,7 +103,8 @@ class Login(APIView):
         password = request.data['password']
         if not username or not password:
             raise ValidationError(detail='username and password is required', code=status.HTTP_400_BAD_REQUEST)
-        
+        if User.objects.filter(username=username) in None:
+            return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
         if User.objects.filter(username=username).exists():
             user = User.objects.get(username=username)
             
@@ -130,8 +131,8 @@ class Login(APIView):
             return Response(data, status=status.HTTP_201_CREATED)
         
             
-        else:
-            return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
     
 
 
