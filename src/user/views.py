@@ -130,8 +130,8 @@ class Login(APIView):
             return Response(data, status=status.HTTP_201_CREATED)
         
             
-        
-        return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
     
 
 
