@@ -71,7 +71,7 @@ class UserListCreateAPIView(APIView):
                 }
             
             cache_key = f'{user.username}_token_data'
-            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=24*60*60)
+            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=2*24*60*60)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
