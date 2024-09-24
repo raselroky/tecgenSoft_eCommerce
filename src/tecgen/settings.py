@@ -183,8 +183,9 @@ CORS_ALLOW_METHODS = [
     'PATCH',
     'POST',
     'PUT',
+    'UPDATE'
 ]
-CSRF_TRUSTED_ORIGINS=["https://tecgen-backend-production.up.railway.app/"]
+CSRF_TRUSTED_ORIGINS=["https://www.tecgensoft.com/"]
 
 
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
