@@ -101,16 +101,18 @@ class Login(APIView):
     
         username = request.data['username']
         password = request.data['password']
+        print('user',username,password)
         if not username or not password:
             raise ValidationError(detail='username and password is required', code=status.HTTP_400_BAD_REQUEST)
-        if User.objects.filter(username=username) in None:
-            return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
+        
         if User.objects.filter(username=username).exists():
+            print('user exist')
             user = User.objects.get(username=username)
             
             if not user.check_password(password):
-                return Response({"message": "Invalid Password."}, status=status.HTTP_401_UNAUTHORIZED)
-                        
+                print('password not correct')
+                return Response({"message": "Invalid Password."}, status=status.HTTP_400_BAD_REQUEST)
+            print('password is correct')      
             # access_token, refresh_token = create_tokens(user=user)
             # data = {
             #     'access_token': access_token,
@@ -131,7 +133,7 @@ class Login(APIView):
             return Response(data, status=status.HTTP_201_CREATED)
         
             
-        
+        print('user doesnot exist')
         return Response({"message": "This username is not found, please sign up!"}, status=status.HTTP_404_NOT_FOUND)
     
 
