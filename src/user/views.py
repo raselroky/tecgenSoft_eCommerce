@@ -110,7 +110,7 @@ class Login(APIView):
             user = User.objects.get(username=username)
             
             if not user.check_password(password):
-                print('password not correct')
+                #print('password not correct')
                 return Response({"message": "Invalid Password."}, status=status.HTTP_400_BAD_REQUEST)
            # print('password is correct')      
             # access_token, refresh_token = create_tokens(user=user)
