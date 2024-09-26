@@ -34,7 +34,7 @@ class Store(BaseModel):
             return self.off_days.split(',')
         return None
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class StorePaymentMethod(BaseModel):
@@ -52,4 +52,4 @@ class StorePaymentMethod(BaseModel):
     is_active = models.BooleanField(default=True)
 
     def __str__(self) :
-        return self.store.name
+        return str(self.store.name)

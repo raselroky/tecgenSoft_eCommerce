@@ -22,7 +22,7 @@ class Stock(BaseModel):
         ]
 
     def __str__(self):
-        return self.store.name
+        return str(self.store.name)
 
 
 class StockHistory(BaseModel):
@@ -45,4 +45,4 @@ class StockHistory(BaseModel):
             models.Index(fields=['invoice_no']),
         ]
     def __str__(self):
-        return f'{self.pk}'
+        return str(self.pk)

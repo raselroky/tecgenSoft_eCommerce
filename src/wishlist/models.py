@@ -16,4 +16,5 @@ class Wishlist(BaseModel):
             models.Index(fields=['-created_at']),
             models.Index(fields=['product_variant']),
         ]
-    
+    def __str__(self):
+        return str(self.product_variant.name)

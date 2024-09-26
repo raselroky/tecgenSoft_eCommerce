@@ -54,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ['-date_joined']
 
     def __str__(self):
-        return self.username
+        return str(self.username)
     
     @property
     def get_full_name(self):
@@ -83,4 +83,4 @@ class UserAddress(models.Model):
         ]
     
     def __str__(self):
-        return self.user.username
+        return str(self.user.username)

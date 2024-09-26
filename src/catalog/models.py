@@ -19,7 +19,7 @@ class Category(BaseModel):
     is_active=models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class SubCategory(BaseModel):
@@ -41,7 +41,7 @@ class SubCategory(BaseModel):
 
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 
@@ -63,7 +63,7 @@ class Brand(BaseModel):
     is_active=models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 
 
@@ -91,7 +91,7 @@ class Attribute(BaseModel):
         ]
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class AttributeValue(BaseModel):
@@ -114,4 +114,4 @@ class AttributeValue(BaseModel):
         ]
 
     def __str__(self):
-        return self.name
+        return str(self.name)

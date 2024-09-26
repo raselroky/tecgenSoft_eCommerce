@@ -66,7 +66,7 @@ class Order(BaseModel):
         ]
 
     def __str__(self):
-        return self.invoice_no
+        return str(self.invoice_no)
     
     @property
     def get_total_item_count(self):

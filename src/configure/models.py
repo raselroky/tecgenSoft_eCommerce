@@ -26,7 +26,7 @@ class Banner(BaseModel):
         ]
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class Country(BaseModel):
@@ -43,7 +43,7 @@ class Country(BaseModel):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         ordering = ["-id"]
@@ -76,7 +76,7 @@ class PlatformCoupon(models.Model):
     
 
     def __str__(self) :
-        return self.promo_code
+        return str(self.promo_code)
 
 
 class MultipleAddress(BaseModel):
@@ -87,12 +87,12 @@ class MultipleAddress(BaseModel):
     
     
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 class AllUsedCoupon(models.Model):
     order_invoice=models.CharField(max_length=1000,null=True,blank=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
 
     def __str__(self) :
-        return self.order_invoice
+        return str(self.order_invoice)
 
