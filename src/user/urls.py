@@ -1,5 +1,5 @@
 from django.urls import path,include
-from user.views import UserListCreateAPIView,Login,Logout,ForgetPassword
+from user.views import UserListCreateAPIView,Login,Logout,ForgetPassword,RefreshTokenAPIView
 
 urlpatterns=[
     path('signup/',UserListCreateAPIView.as_view(),name='user-create-api'),
@@ -9,5 +9,6 @@ urlpatterns=[
     #path('logouts/',obtain_auth_token,name='logout-users'),
     
     #path('refresh-token/',refreshed_token.as_view(),name='refresh-token-users'),
+    path('refresh-token/', RefreshTokenAPIView.as_view(), name='token_refresh'),
 
 ]

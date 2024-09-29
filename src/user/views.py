@@ -23,7 +23,8 @@ import logging
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
-
+from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserListCreateAPIView(APIView):
 
@@ -217,4 +218,41 @@ class ForgetPassword(APIView):
 
 
 
+class RefreshTokenAPIView(APIView):
+    permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'refresh': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh token')
+            },
+            required=['refresh']
+        ),
+        responses={
+            200: openapi.Response('Token refreshed successfully', openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'access': openapi.Schema(type=openapi.TYPE_STRING, description='Access token'),
+                }
+            )),
+            401: 'Invalid refresh token'
+        }
+    )
+    def post(self, request, *args, **kwargs):
+        
+        refresh_token = request.data.get('refresh')
+        
+        if not refresh_token:
+            return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            refresh = RefreshToken(refresh_token)
+            new_access_token = str(refresh.access_token)
+
+            return Response({
+                'access': new_access_token
+            }, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
