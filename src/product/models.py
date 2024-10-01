@@ -45,7 +45,7 @@ class ProductVariant(BaseModel):
     is_upcoming = models.BooleanField(default=False)
     is_new_arrival = models.BooleanField(default=False)
     show_in_ecommerce = models.BooleanField(default=True)
-
+    free_delivery=models.BooleanField(default=False)
     rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=0)
     ordering = models.PositiveIntegerField(default=0)
     weight = models.FloatField(blank=True,null=True,help_text="Weight of this specific variant")

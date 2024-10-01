@@ -13,7 +13,7 @@ urlpatterns=[
     path('brand/',BrandListCreateAPIView.as_view(),name='brand-create-list-api'),
     path('brand-retrieve-update-destroy/<int:id>',BrandRetrieveUpdateDestroyAPIView.as_view(),name='brand-retrieve-update-destroy'),
 
-    path('user-all-categories/',PublicAllCategoryListAPIView.as_view(),name='all-list'),
+    path('users-all-categories/',PublicAllCategoryListAPIView.as_view(),name='all-list'),
 
     path('attribute-create/',AttributeListCreateAPIView.as_view(),name='attribute-create-api'),
     path('attribute-update-destroy/<int:id>',AttributeRetrieveUpdateDestroyAPIView.as_view(),name='attribute-retrieve-update-destroy-api'),
@@ -21,8 +21,8 @@ urlpatterns=[
     path('attribute-value-update-destroy/<int:id>',AttributevalueRetrieveUpdateDestroyAPIView.as_view(),name='attribute-value-retrieve-update-destroy-api'),
 
     #user
-    path('user-category/',UserCateogryAllListAPIView.as_view(),name='user-category-api'),
-    path('user-subcategory/',UserSubCateogryAllListAPIView.as_view(),name='user-subcategory-api'),
-    path('user-brand/',UserBrandAllListAPIView.as_view(),name='user-brand-api'),
+    path('users-category/',UserCateogryAllListAPIView.as_view(),name='user-category-api'),
+    path('users-subcategory/',UserSubCateogryAllListAPIView.as_view(),name='user-subcategory-api'),
+    path('users-brand/',UserBrandAllListAPIView.as_view(),name='user-brand-api'),
 
 ]

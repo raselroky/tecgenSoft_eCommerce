@@ -31,8 +31,8 @@ urlpatterns=[
 
 
     # path('best-selling-products',PublicBestSellingProductVariantListAPIView.as_view(),name='best-selling-products-list-api'),
-    path('new-arrivals-products',PublicNewArrivalProductVariantListAPIView.as_view(),name='new-arrivals-products-list-api'),
-    path('recent-newly-products',PublicRecentNewlyProductVariantListAPIView.as_view(),name='newly-recent-products-list-api'),
+    path('users-new-arrivals-products',PublicNewArrivalProductVariantListAPIView.as_view(),name='new-arrivals-products-list-api'),
+    path('uers-recent-newly-products',PublicRecentNewlyProductVariantListAPIView.as_view(),name='newly-recent-products-list-api'),
 
     # path('users-cart-create/',UserCartItemListCreateAPIView.as_view(),name='user-cart-create-api'),
     # path('users-cart-retrieve-update-destroy/<int:id>',UserCartItemListRetrieveUpdateDestroyAPIView.as_view(),name='user-cart-retrieve-update-destroy-api'),
