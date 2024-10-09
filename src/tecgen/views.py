@@ -27,6 +27,11 @@ from urllib.parse import urlparse
 ###
 from django.conf import settings
 from rest_framework.parsers import MultiPartParser, FormParser
+import os
+import uuid
+import random
+import string
+
 class ImageUploadView(APIView):
     permission_classes=(AllowAny,)
     parser_classes = (MultiPartParser, FormParser)
@@ -36,8 +41,13 @@ class ImageUploadView(APIView):
             return Response({'error': 'No image provided'}, status=status.HTTP_400_BAD_REQUEST)
 
         image = request.FILES['image']
-        # Save the image
-        file_name = image.name
+        
+        random_integer = random.randint(11, 9999)
+        random_string = ''.join(random.choices(string.ascii_letters, k=3))
+
+        int_char=str(random_string)+str(random_integer)
+
+        file_name = f'{uuid.uuid4().hex}{int_char}{image.name}'
         with open(f'media/{file_name}', 'wb') as f:
             for chunk in image.chunks():
                 f.write(chunk)
