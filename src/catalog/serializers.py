@@ -3,7 +3,20 @@ from catalog.models import Category,SubCategory,Brand,AttributeValue,Attribute
 
 class CategorySerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
-    
+    created_by=serializers.SerializerMethodField()
+    updated_by=serializers.SerializerMethodField()
+    def get_created_by(self,obj):
+        if obj.created_by:
+            return {
+                "username":obj.created_by.username
+            }
+        return None
+    def get_updated_by(self,obj):
+        if obj.updated_by:
+            return {
+                "username":obj.updated_by.username
+            }
+        return None
     class Meta:
         model=Category
         fields='__all__'
@@ -12,7 +25,27 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class BrandSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
-   
+    created_by=serializers.SerializerMethodField()
+    updated_by=serializers.SerializerMethodField()
+    sub_category=serializers.SerializerMethodField()
+    def get_created_by(self,obj):
+        if obj.created_by:
+            return {
+                "username":obj.created_by.username
+            }
+        return None
+    def get_updated_by(self,obj):
+        if obj.updated_by:
+            return {
+                "username":obj.updated_by.username
+            }
+        return None
+    def get_sub_category(self,obj):
+        if obj.sub_category:
+            return {
+                "name":obj.sub_category.name
+            }
+        return None
     class Meta:
         model=Brand
         fields='__all__'
@@ -21,11 +54,33 @@ class BrandSerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     brand=serializers.SerializerMethodField()
-    
+    category=serializers.SerializerMethodField()
+
+    created_by=serializers.SerializerMethodField()
+    updated_by=serializers.SerializerMethodField()
+    def get_created_by(self,obj):
+        if obj.created_by:
+            return {
+                "username":obj.created_by.username
+            }
+        return None
+    def get_updated_by(self,obj):
+        if obj.updated_by:
+            return {
+                "username":obj.updated_by.username
+            }
+        return None
+
     def get_brand(self,obj):
         brand=Brand.objects.filter(sub_category__name=obj)
         return BrandSerializer(brand,many=True).data
 
+    def get_category(self,obj):
+        if obj.category:
+            return {
+                "name":obj.category.name
+            }
+        return None
     class Meta:
         model=SubCategory
         fields='__all__'
@@ -47,13 +102,39 @@ class AllCategoryChildSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
-   
+    created_by=serializers.SerializerMethodField()
+    updated_by=serializers.SerializerMethodField()
+    def get_created_by(self,obj):
+        if obj.created_by:
+            return {
+                "username":obj.created_by.username
+            }
+        return None
+    def get_updated_by(self,obj):
+        if obj.updated_by:
+            return {
+                "username":obj.updated_by.username
+            }
+        return None
     class Meta:
         model=Attribute
         fields='__all__'
 class AttributeValueSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
-   
+    created_by=serializers.SerializerMethodField()
+    updated_by=serializers.SerializerMethodField()
+    def get_created_by(self,obj):
+        if obj.created_by:
+            return {
+                "username":obj.created_by.username
+            }
+        return None
+    def get_updated_by(self,obj):
+        if obj.updated_by:
+            return {
+                "username":obj.updated_by.username
+            }
+        return None
     class Meta:
         model=AttributeValue
         fields='__all__'

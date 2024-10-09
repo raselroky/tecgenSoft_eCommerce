@@ -73,7 +73,7 @@ class ImageDeleteView(APIView):
 
         # Construct the full path of the image
         image_path = os.path.join(settings.MEDIA_ROOT, image_name)
-
+        print(image_path,image_name)
         # Check if the file exists
         if os.path.exists(image_path):
             try:
