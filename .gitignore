@@ -9,7 +9,7 @@ staticfiles/
 static/
 *static/
 static_assets/
-db.sqlite3
+#db.sqlite3
 shonali/local_settings.py
 Project_Default.xml
 .idea/vcs.xml
@@ -160,7 +160,7 @@ override.tf.json
 # End of https://www.gitignore.io/api/python,terraform
 .vscode
 
-migrations/
+#migrations/
 
 
-migrations
+#migrations
