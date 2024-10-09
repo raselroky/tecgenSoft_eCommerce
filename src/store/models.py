@@ -21,8 +21,8 @@ class Store(BaseModel):
     is_active=models.BooleanField(default=False)
     #off_days = ArrayField(models.CharField(max_length=15), default=list)
 
-    logo = models.FileField(upload_to='images',null=True,blank=True)
-    cover_photo = models.FileField(upload_to='images',null=True,blank=True)
+    logo = models.JSONField(default=list)
+    cover_photo =models.JSONField(default=list)
     bio = models.CharField(max_length=100,null=True)
     about = models.TextField(null=True,blank=True)
     policies=models.TextField(null=True,blank=True)

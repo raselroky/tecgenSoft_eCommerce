@@ -3,7 +3,8 @@ db/
 __pycache__/
 mediafiles/
 staticfiles/
-#media/
+media/
+images/
 staticfiles/
 static/
 *static/

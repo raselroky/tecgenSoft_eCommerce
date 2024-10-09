@@ -16,7 +16,7 @@ class Campaign(BaseModel):
     max_discount = models.FloatField(default=0)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    image = models.URLField(null=True,blank=True)
+    image = models.JSONField(default=list)
     
     description = models.TextField(null=True,blank=True)
     terms_and_conditions = models.TextField(null=True,blank=True)
