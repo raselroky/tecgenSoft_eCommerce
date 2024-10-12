@@ -29,7 +29,7 @@ class BrandSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     created_by=serializers.SerializerMethodField()
     updated_by=serializers.SerializerMethodField()
-    sub_category=serializers.SerializerMethodField()
+    sub_category=serializers.PrimaryKeyRelatedField(queryset=SubCategory.objects.all(), required=True)
     def get_created_by(self,obj):
         if obj.created_by:
             return {
@@ -59,7 +59,8 @@ class BrandSerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     brand=serializers.SerializerMethodField()
-    category=serializers.SerializerMethodField()
+    # category=serializers.SerializerMethodField()
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=True)
 
     created_by=serializers.SerializerMethodField()
     updated_by=serializers.SerializerMethodField()
@@ -82,13 +83,13 @@ class SubCategorySerializer(serializers.ModelSerializer):
         brand=Brand.objects.filter(sub_category__name=obj)
         return BrandSerializer(brand,many=True).data
 
-    def get_category(self,obj):
-        if obj.category:
-            return {
-                "id":obj.category.id,
-                "name":obj.category.name
-            }
-        return None
+    # def get_category(self,obj):
+    #     if obj.category:
+    #         return {
+    #             "id":obj.category.id,
+    #             "name":obj.category.name
+    #         }
+    #     return None
     class Meta:
         model=SubCategory
         fields='__all__'
