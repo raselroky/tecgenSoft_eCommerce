@@ -1,11 +1,9 @@
 from campaign.models import CampaignMember,Campaign,DealOfTheWeek
-from typing import (
-    List, 
-    Callable,
-    Any, 
-    Type,
-    Dict
-)
+from typing import List, Callable,Any, Type,Dict
+
+from stock.models import Stock,StockHistory
+from helper.models import TransactionTypes
+
 
 def get_overall_discount_calculated_values(obj,selling_price):
     discount=0
@@ -56,3 +54,24 @@ def remove_duplicate_from_list(iterable: List, key:  Callable = None) ->List:
         seen.add(k)
 
 
+
+def handle_stock_out(data: list):
+    """ 
+    takes a list of mapped stock data and bulk_updates the stock
+    and creates stock history in bulk
+    """
+    
+    Stock.objects.bulk_update([Stock(
+        id=item['stock_id'],
+        quantity = item['stock_balance'] - item['order_quantity']
+    ) for item in data], ['quantity'])
+    
+    StockHistory.objects.bulk_create([StockHistory(
+        type=TransactionTypes.OUT,
+        store=item['store'],
+        stock_id=item['stock_id'],
+        product_variant=item['product_variant'],
+        country_id=item['country_id'],
+        quantity=item['order_quantity'],
+        balance=item['stock_balance']
+    ) for item in data])

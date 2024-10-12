@@ -21,8 +21,8 @@ class Store(BaseModel):
     is_active=models.BooleanField(default=False)
     #off_days = ArrayField(models.CharField(max_length=15), default=list)
 
-    logo = models.FileField(upload_to='images',null=True,blank=True)
-    cover_photo = models.FileField(upload_to='images',null=True,blank=True)
+    logo = models.JSONField(default=list)
+    cover_photo =models.JSONField(default=list)
     bio = models.CharField(max_length=100,null=True)
     about = models.TextField(null=True,blank=True)
     policies=models.TextField(null=True,blank=True)
@@ -34,7 +34,7 @@ class Store(BaseModel):
             return self.off_days.split(',')
         return None
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class StorePaymentMethod(BaseModel):
@@ -52,4 +52,4 @@ class StorePaymentMethod(BaseModel):
     is_active = models.BooleanField(default=True)
 
     def __str__(self) :
-        return self.store.name
+        return str(self.store.name)

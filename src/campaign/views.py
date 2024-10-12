@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIView,RetrieveUpdateDestroyAPIView
 from campaign.serializers import CampaignSerializer,CampaignMemberSerializer,DealOfTheWeekSerializer
 from campaign.models import Campaign,CampaignMember,DealOfTheWeek
+from product.models import ProductVariant
 from rest_framework.views import APIView
 import json
 from rest_framework import status
@@ -31,6 +32,7 @@ class CampaignListCreateAPIView(ListCreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -43,10 +45,19 @@ class CampaignRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     lookup_field='id'
 
     def update(self, request, *args, **kwargs):
-        updated_request_data = entries_to_remove(self.request.data, self.removeable_keys)
-        self.request.data.update(updated_request_data)
-        self.request.data['updated_by'] = self.request.user.id
-        return super(CampaignRetrieveUpdateDestroyAPIView, self).update(request, *args, **kwargs)
+        data = request.data.copy()  # This makes the QueryDict mutable
+
+        # Remove unwanted keys and add 'updated_by'
+        updated_request_data = entries_to_remove(data, self.removeable_keys)
+        data.update(updated_request_data)
+        data['updated_by'] = self.request.user.id
+
+        # Pass the mutable data to the serializer
+        serializer = self.get_serializer(instance=self.get_object(), data=data, partial=kwargs.get('partial', False))
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
     
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -58,10 +69,25 @@ class CampaignMemberListCreateAPIView(ListCreateAPIView):
     permission_classes=(IsAuthenticated,)
     queryset=CampaignMember.objects.all()
     serializer_class=CampaignMemberSerializer
-
+    removeable_keys = ('slug',)
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         data['created_by'] = request.user.id
+
+        product_id = data.get('product_variant') 
+        if product_id:
+            product = ProductVariant.objects.filter(id=product_id).first()
+            deal=DealOfTheWeek.objects.filter(product_variant__id=product_id)
+            if deal:
+                deal=DealOfTheWeek.objects.filter(product_variant__id=product_id).first()
+            else:
+                deal=None
+            if product and (product.online_discount or deal):
+                return Response(
+                    {"detail": "Cannot add campaign member as the product has an active discount or deal."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -76,6 +102,32 @@ class CampaignMemberRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset=CampaignMember.objects.all()
     serializer_class=CampaignMemberSerializer
     lookup_field='id'
+    removeable_keys = ('slug',)
+
+    def update(self, request, *args, **kwargs):
+        data = request.data.copy()  # This makes the QueryDict mutable
+
+        product_id = data.get('product_variant')
+        
+        if product_id:
+            product = ProductVariant.objects.filter(id=product_id).first()
+            deal=DealOfTheWeek.objects.filter(product_variant__id=product_id)
+            if deal:
+                deal=DealOfTheWeek.objects.filter(product_variant__id=product_id).first()
+            else:
+                deal=None
+            
+            if product and (product.online_discount or deal):
+                return Response(
+                    {"detail": "Cannot add deal-of-the-week as the product has an active discount or campaign."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        data['updated_by'] = self.request.user.id
+        # Pass the mutable data to the serializer
+        serializer = self.get_serializer(instance=self.get_object(), data=data, partial=kwargs.get('partial', False))
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -91,6 +143,21 @@ class DealOfTheWeekListCreateAPIView(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         data['created_by'] = request.user.id
+
+        product_id = data.get('product_variant') 
+        if product_id:
+            product = ProductVariant.objects.filter(id=product_id).first()
+            deal=DealOfTheWeek.objects.filter(product_variant__id=product_id)
+            if deal:
+                deal=DealOfTheWeek.objects.filter(product_variant__id=product_id).first()
+            else:
+                deal=None
+            if product and (product.online_discount or deal):
+                return Response(
+                    {"detail": "Cannot add deal-of-the-week as the product has an active discount or campaign."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -105,7 +172,38 @@ class DealOfTheWeekRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset=DealOfTheWeek.objects.all()
     serializer_class=DealOfTheWeekSerializer
     lookup_field='id'
+    
+    def update(self, request, *args, **kwargs):
+        #instance = self.get_object()
+        data = request.data.copy()  # This makes the QueryDict mutable
 
+        # Remove unwanted keys and add 'updated_by'
+        # updated_request_data = entries_to_remove(data, self.removeable_keys)
+        # data.update(updated_request_data)
+        
+
+        product_id = data.get('product_variant') 
+        #print('hey',product_id)
+        if product_id:
+            product = ProductVariant.objects.filter(id=product_id).first()
+            deal=DealOfTheWeek.objects.filter(product_variant__id=product_id)
+            if deal:
+                deal=DealOfTheWeek.objects.filter(product_variant__id=product_id).first()
+            else:
+                deal=None
+            if product and (product.online_discount or deal):
+                return Response(
+                    {"detail": "Cannot add deal-of-the-week as the product has an active discount or campaign."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        data['updated_by'] = self.request.user.id
+        # Pass the mutable data to the serializer
+        serializer = self.get_serializer(instance=self.get_object(), data=data, partial=kwargs.get('partial', False))
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+    
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)

@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 import random
 from rest_framework.exceptions import APIException
+from django.db import connection
 
 def identifier_builder(table_name: str, prefix: str = None) -> str:
     with connection.cursor() as cur:

@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from .views import ImageUploadView,ImageDeleteView
 
 schema_view=get_schema_view(
     openapi.Info(
@@ -32,7 +33,12 @@ urlpatterns = [
     path('product/',include('product.urls')),
     path('configure/',include('configure.urls')),
     path('order/',include('order.urls')),
+    path('stock/',include('stock.urls')),
+    path('wishlist/',include('wishlist.urls')),
+    path('cart/',include('cartitem.urls')),
     # path('auth/', include('rest_authtoken.urls')),
+    path('upload-image/', ImageUploadView.as_view(), name='upload-image'),
+    path('delete-image/', ImageDeleteView.as_view(), name='delete-image'),
     
 
     path('swagger',schema_view.with_ui('swagger',cache_timeout=0),name='schema-swagger-ui'),

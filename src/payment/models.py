@@ -29,7 +29,7 @@ class OnlinePayment(BaseModel):
         ]
 
     def __str__(self):
-        return self.transaction_number
+        return str(self.transaction_number)
 
 class OrderPaymentModel(BaseModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE,null=True,blank=True)
@@ -40,4 +40,4 @@ class OrderPaymentModel(BaseModel):
 
 
     def __str__(self):
-        return self.order.invoice_no
+        return str(self.order.invoice_no)

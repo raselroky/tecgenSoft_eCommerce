@@ -14,12 +14,12 @@ class Category(BaseModel):
     name=models.CharField(max_length=500,null=True,blank=True)
     show_in_ecommerce=models.BooleanField(default=False)
     ordering = models.PositiveIntegerField(default=0)
-    icon=models.FileField(upload_to='iamges',null=True,blank=True)
-    logo=models.FileField(upload_to='images',null=True,blank=True)
+    icon=models.JSONField(default=list)
+    logo=models.JSONField(default=list)
     is_active=models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class SubCategory(BaseModel):
@@ -34,14 +34,14 @@ class SubCategory(BaseModel):
     category=models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
     show_in_ecommerce=models.BooleanField(default=False)
     ordering = models.PositiveIntegerField(default=0)
-    icon=models.FileField(upload_to='iamges',null=True,blank=True)
-    logo=models.FileField(upload_to='images',null=True,blank=True)
+    icon=models.JSONField(default=list)
+    logo=models.JSONField(default=list)
     is_active=models.BooleanField(default=True)
 
 
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 
@@ -58,12 +58,12 @@ class Brand(BaseModel):
     sub_category=models.ForeignKey(SubCategory,on_delete=models.CASCADE,null=True,blank=True)
     show_in_ecommerce=models.BooleanField(default=False)
     ordering = models.PositiveIntegerField(default=0)
-    icon=models.FileField(upload_to='iamges',null=True,blank=True)
-    logo=models.FileField(upload_to='images',null=True,blank=True)
+    icon=models.JSONField(default=list)
+    logo=models.JSONField(default=list)
     is_active=models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
 
 
@@ -91,7 +91,7 @@ class Attribute(BaseModel):
         ]
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class AttributeValue(BaseModel):
@@ -114,4 +114,4 @@ class AttributeValue(BaseModel):
         ]
 
     def __str__(self):
-        return self.name
+        return str(self.name)

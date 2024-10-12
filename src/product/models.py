@@ -6,6 +6,7 @@ from user.models import User
 from catalog.models import Category,SubCategory,Brand,Attribute,AttributeValue
 from helper.models import BaseModel,DiscountTypeChoices
 from configure.models import Country
+from django.forms.models import model_to_dict
 
 class ProductUnit(BaseModel):
     # created_by=models.ForeignKey(Users,on_delete=models.CASCADE,related_name='created_%(class)ss',null=True,blank=True)
@@ -44,7 +45,7 @@ class ProductVariant(BaseModel):
     is_upcoming = models.BooleanField(default=False)
     is_new_arrival = models.BooleanField(default=False)
     show_in_ecommerce = models.BooleanField(default=True)
-
+    free_delivery=models.BooleanField(default=False)
     rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=0)
     ordering = models.PositiveIntegerField(default=0)
     weight = models.FloatField(blank=True,null=True,help_text="Weight of this specific variant")
@@ -55,6 +56,9 @@ class ProductVariant(BaseModel):
         if self.name==None:
             return str(self.id)
         return str(self.name)
+        
+
+
 
 
 class ProductVariantAttribute(BaseModel):
@@ -112,3 +116,17 @@ class QuantityWiseProductVariantPrice(BaseModel):
     
     def __str__(self):
         return str(self.product_variant.id)+' '+str(self.country.name)
+
+class CountryWiseProductVariant(BaseModel):
+        
+    product_variant = models.ForeignKey(ProductVariant,on_delete=models.CASCADE,null=True,blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE,null=True,blank=True)
+    
+    customs_charge = models.FloatField(default=0)
+   
+    per_kg_charge = models.FloatField(null=True)
+    shipment_charge = models.FloatField(null=True,blank=True)
+    
+    def __str__(self):
+        return str(self.product_variant.name)+' '+str(self.country.name)
+

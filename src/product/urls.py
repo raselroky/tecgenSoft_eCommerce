@@ -1,9 +1,11 @@
 from django.urls import path,include
 from product.views import (
-    ProductUnitListCreateAPIView,ProductUnitRetrieveUpdateDestroyAPIView,ProductVariantListCreateAPIView,ProductVariantRetrieveUpdateDestroyListCreateAPIView,
+    ProductUnitListCreateAPIView,ProductUnitRetrieveUpdateDestroyAPIView,ProductVariantListCreateAPIView,ProductVariantRetrieveUpdateDestroyAPIView,
     ProductVariantAttributeListCreateAPIView,ProductVariantAttributeRetrieveUpdateDestroyAPIView,ProductVariantReviewListCreateAPIView,ProductVariantReviewRetrieveUpdateDestroyAPIView,
     PublicProductVariantAttributeListAPIView,PublicProductVariantAttributeRetrieveAPIView,PublicProductVariantListAPIView,PublicProductVariantRetrieveAPIView,
-    PublicProductVariantReviewListAPIView,PublicProductVariantReviewretRieveAPIView,PublicNewArrivalProductVariantListAPIView,PublicRecentNewlyProductVariantListAPIView
+    PublicProductVariantReviewListAPIView,PublicProductVariantReviewretRieveAPIView,PublicNewArrivalProductVariantListAPIView,PublicRecentNewlyProductVariantListAPIView,
+
+
     )
 
 
@@ -12,7 +14,7 @@ urlpatterns=[
     path('productunit-create/',ProductUnitListCreateAPIView.as_view(),name='product-unit-create-api'),
     path('productunit-retrieve-update-destroy/<int:id>',ProductUnitRetrieveUpdateDestroyAPIView.as_view(),name='product-unit-retrieve-update-destroy-api'),
     path('productvariant-create/',ProductVariantListCreateAPIView.as_view(),name='product-variant-create-api'),
-    path('productvariant-retrieve-update-destroy/<int:id>',ProductVariantRetrieveUpdateDestroyListCreateAPIView.as_view(),name='product-variant-retrieve-update-destroy-api'),
+    path('productvariant-retrieve-update-destroy/<int:id>',ProductVariantRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-retrieve-update-destroy-api'),
     path('productvariant-attribute-create/',ProductVariantAttributeListCreateAPIView.as_view(),name='product-variant-attribute-create-api'),
     path('productvariant-attribute-retrieve-update-destroy/<int:id>',ProductVariantAttributeRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-attribute-retrieve-update-destroy-api'),
     path('productvariant-review-create/',ProductVariantReviewListCreateAPIView.as_view(),name='product-variant-review-create-api'),
@@ -29,8 +31,11 @@ urlpatterns=[
 
 
     # path('best-selling-products',PublicBestSellingProductVariantListAPIView.as_view(),name='best-selling-products-list-api'),
-    path('new-arrivals-products',PublicNewArrivalProductVariantListAPIView.as_view(),name='new-arrivals-products-list-api'),
-    path('recent-newly-products',PublicRecentNewlyProductVariantListAPIView.as_view(),name='newly-recent-products-list-api'),
+    path('users-new-arrivals-products',PublicNewArrivalProductVariantListAPIView.as_view(),name='new-arrivals-products-list-api'),
+    path('uers-recent-newly-products',PublicRecentNewlyProductVariantListAPIView.as_view(),name='newly-recent-products-list-api'),
+
+    # path('users-cart-create/',UserCartItemListCreateAPIView.as_view(),name='user-cart-create-api'),
+    # path('users-cart-retrieve-update-destroy/<int:id>',UserCartItemListRetrieveUpdateDestroyAPIView.as_view(),name='user-cart-retrieve-update-destroy-api'),
 
 
 

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
@@ -40,10 +41,15 @@ INSTALLED_APPS = [
     'order',
     'configure',
     'payment',
+    'stock',
+    'wishlist',
+    'cartitem'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #'whitenoise.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,7 +79,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tecgen.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -123,7 +128,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #STATICFILES_DIRS =[os.path.join(BASE_DIR, 'static')]
-
+STATICSSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -180,7 +185,7 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
-
+CSRF_TRUSTED_ORIGINS=["https://www.tecgensoft.com/"]
 
 
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
@@ -192,6 +197,8 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+# SECURE_SSL_REDIRECT = True
 
 # SSL_STORE_ID='shobl656ef44d52976'
 # SSL_STORE_PASSWORD='shobl656ef44d52976@ssl'
@@ -211,6 +218,7 @@ CACHES = {
 
 # FRONTEND_BASE_URL='https://shob.com.bd'
 # BACKEND_BASE_URL='http://192.168.68.130'
+
 
 
 AUTH_USER_MODEL = 'user.User'

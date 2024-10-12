@@ -94,3 +94,16 @@ class OnlinePaymentStatusOptions(models.TextChoices):
     FAILED = 'failed', 'failed'
     SUCCESSFUL = 'successful', 'successful'
     EXPIRED = 'expired', 'expired'
+
+class TransactionTypes(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    PURCHASE_RETURN = 'purchase_return', 'purchase_return'
+    PURCHASE = 'purchase', 'purchase'
+    STORE_SELL = 'store_sell', 'store_sell'
+    ECOMMERCE_SELL = 'ecommerce_sell', 'ecommerce_sell'
+    ECOMMERCE_RETURN = 'ecommerce_return', 'ecommerce_return'
+    TRANSFERRED_IN = 'transferred_in', 'transferred_in'
+    TRANSFERRED_OUT = 'transferred_out', 'transferred_out'
+    IN = 'stock_in', 'stock_in'
+    OUT = 'stock_out', 'stock_out'
+    ADJUSTMENT = 'adjustment', 'adjustment'

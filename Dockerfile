@@ -16,6 +16,8 @@ RUN pip3 install -r requirements.txt && apt-get --purge autoremove build-essenti
 COPY src/ /app/src/
 COPY entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+
 CMD ["entrypoint.sh"]
 
 EXPOSE 8000
