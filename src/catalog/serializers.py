@@ -8,12 +8,14 @@ class CategorySerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None
@@ -31,18 +33,21 @@ class BrandSerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None
     def get_sub_category(self,obj):
         if obj.sub_category:
             return {
+                "id":obj.sub_category.id,
                 "name":obj.sub_category.name
             }
         return None
@@ -61,12 +66,14 @@ class SubCategorySerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None
@@ -78,6 +85,7 @@ class SubCategorySerializer(serializers.ModelSerializer):
     def get_category(self,obj):
         if obj.category:
             return {
+                "id":obj.category.id,
                 "name":obj.category.name
             }
         return None
@@ -107,12 +115,14 @@ class AttributeSerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.updated_by.username
             }
         return None
@@ -126,12 +136,14 @@ class AttributeValueSerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None
