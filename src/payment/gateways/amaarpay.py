@@ -15,7 +15,7 @@ def amarpay_payment_create(data: Dict, customer: User) -> Dict:
     :param customer:
     :return:
     """
-    customer_name = 'Shob Customer'
+    customer_name = 'tecgen Customer'
     if customer.first_name and customer.last_name:
         customer_name = f'{customer.first_name} {customer.last_name}'
     try:

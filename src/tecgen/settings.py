@@ -1,6 +1,17 @@
 
 from pathlib import Path
 import os
+from django.middleware.csrf import CsrfViewMiddleware
+
+class WebSocketMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Skip CSRF for WebSocket requests
+        if request.path.startswith("/ws/"):
+            setattr(request, '_dont_enforce_csrf_checks', True)
+        return self.get_response(request)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_yasg',
     'corsheaders',
+    'channels',
     'helper',
     'user',
     'catalog',
@@ -43,7 +55,9 @@ INSTALLED_APPS = [
     'payment',
     'stock',
     'wishlist',
-    'cartitem'
+    'cartitem',
+    'notification',
+    'location',
 ]
 
 MIDDLEWARE = [
@@ -57,11 +71,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'tecgen.settings.WebSocketMiddleware',
 
 ]
 
 ROOT_URLCONF = 'tecgen.urls'
-
+ASGI_APPLICATION = 'tecgen.asgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -191,12 +206,6 @@ CSRF_TRUSTED_ORIGINS=["https://www.tecgensoft.com/"]
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
 SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # Using local memory cache for example
-        'LOCATION': 'unique-snowflake',
-    }
-}
 
 # SECURE_SSL_REDIRECT = True
 
@@ -220,5 +229,67 @@ CACHES = {
 # BACKEND_BASE_URL='http://192.168.68.130'
 
 
+# from celery import Celery
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tecgen.settings')
+# celery_app = Celery('tecgen')
+# celery_app.config_from_object('django.conf:settings', namespace='CELERY')
+# celery_app.autodiscover_tasks(lambda: INSTALLED_APPS)
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # Using local memory cache for example
+        'LOCATION': 'unique-snowflake',
+    }
+}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://{}:6379/1".format('redis'),
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#             "SOCKET_CONNECT_TIMEOUT": 5,
+#             "SOCKET_TIMEOUT": 5,
+#             "IGNORE_EXCEPTIONS": True,
+#             "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
+#             "MASTER_CACHE": f"redis://{'redis'}:6379",
+#             "DB": 4,
+#         },
+#         "KEY_PREFIX": "tecgen",
+#     }
+# }
+# CACHEOPS_REDIS = "redis://{}:6379/1".format('redis')
+
+# CACHEOPS_DEGRADE_ON_FAILURE = True
+# CACHEOPS_ENABLED = True
+
+# CACHEOPS = {
+#     'catalog.Category': {'ops': 'all', 'timeout': 60},
+#     'catalog.SubCategory': {'ops': 'all', 'timeout': 60},
+#     'catalog.Brand': {'ops': 'all', 'timeout': 60},
+   
+# }
+
+# # 5 minutes cache
+# CACHE_MIDDLEWARE_SECONDS = 300
+
+# celery
+# CELERY_BROKER_URL = 'amqp://myuser:mypass@rabbitmq:5672/myvhost'
+# CELERY_RESULT_BACKEND = "redis://{}:6379/".format('redis')
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'
+# CELERY_TASK_RESULT_EXPIRES = 3600
+# CELERY_TASK_DEFAULT_QUEUE = 'tecgen.celery'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
 
 AUTH_USER_MODEL = 'user.User'

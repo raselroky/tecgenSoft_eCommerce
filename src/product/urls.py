@@ -11,14 +11,14 @@ from product.views import (
 
 urlpatterns=[
     #admin
-    path('productunit-create/',ProductUnitListCreateAPIView.as_view(),name='product-unit-create-api'),
-    path('productunit-retrieve-update-destroy/<int:id>',ProductUnitRetrieveUpdateDestroyAPIView.as_view(),name='product-unit-retrieve-update-destroy-api'),
-    path('productvariant-create/',ProductVariantListCreateAPIView.as_view(),name='product-variant-create-api'),
-    path('productvariant-retrieve-update-destroy/<int:id>',ProductVariantRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-retrieve-update-destroy-api'),
-    path('productvariant-attribute-create/',ProductVariantAttributeListCreateAPIView.as_view(),name='product-variant-attribute-create-api'),
-    path('productvariant-attribute-retrieve-update-destroy/<int:id>',ProductVariantAttributeRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-attribute-retrieve-update-destroy-api'),
-    path('productvariant-review-create/',ProductVariantReviewListCreateAPIView.as_view(),name='product-variant-review-create-api'),
-    path('productvariant-review-retrieve-update-destroy/<int:id>',ProductVariantReviewRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-review-retrieve-update-destroy-api'),
+    path('admin-productunit-create/',ProductUnitListCreateAPIView.as_view(),name='product-unit-create-api'),
+    path('admin-productunit-retrieve-update-destroy/<int:id>',ProductUnitRetrieveUpdateDestroyAPIView.as_view(),name='product-unit-retrieve-update-destroy-api'),
+    path('admin-productvariant-create/',ProductVariantListCreateAPIView.as_view(),name='product-variant-create-api'),
+    path('admin-productvariant-retrieve-update-destroy/<int:id>',ProductVariantRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-retrieve-update-destroy-api'),
+    path('admin-productvariant-attribute-create/',ProductVariantAttributeListCreateAPIView.as_view(),name='product-variant-attribute-create-api'),
+    path('admin-productvariant-attribute-retrieve-update-destroy/<int:id>',ProductVariantAttributeRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-attribute-retrieve-update-destroy-api'),
+    path('admin-productvariant-review-create/',ProductVariantReviewListCreateAPIView.as_view(),name='product-variant-review-create-api'),
+    path('admin-productvariant-review-retrieve-update-destroy/<int:id>',ProductVariantReviewRetrieveUpdateDestroyAPIView.as_view(),name='product-variant-review-retrieve-update-destroy-api'),
 
 
     #users

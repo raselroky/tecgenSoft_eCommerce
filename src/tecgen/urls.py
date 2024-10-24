@@ -36,6 +36,8 @@ urlpatterns = [
     path('stock/',include('stock.urls')),
     path('wishlist/',include('wishlist.urls')),
     path('cart/',include('cartitem.urls')),
+    path('location/',include('location.urls')),
+    path('notification/',include('notification.urls')),
     # path('auth/', include('rest_authtoken.urls')),
     path('upload-image/', ImageUploadView.as_view(), name='upload-image'),
     path('delete-image/', ImageDeleteView.as_view(), name='delete-image'),

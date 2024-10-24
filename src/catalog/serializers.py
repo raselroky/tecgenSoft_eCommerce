@@ -8,12 +8,14 @@ class CategorySerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None
@@ -27,46 +29,54 @@ class BrandSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     created_by=serializers.SerializerMethodField()
     updated_by=serializers.SerializerMethodField()
-    sub_category=serializers.SerializerMethodField()
+    sub_category=serializers.PrimaryKeyRelatedField(queryset=SubCategory.objects.all(), required=True)
+    sub_category_name=serializers.SerializerMethodField() 
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None
-    def get_sub_category(self,obj):
+    def get_sub_category_name(self,obj):
         if obj.sub_category:
             return {
+                "id":obj.sub_category.id,
                 "name":obj.sub_category.name
             }
         return None
     class Meta:
         model=Brand
         fields='__all__'
+        
 
 
 class SubCategorySerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     brand=serializers.SerializerMethodField()
-    category=serializers.SerializerMethodField()
-
+    # category=serializers.SerializerMethodField()
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=True)
+    category_name = serializers.SerializerMethodField() 
     created_by=serializers.SerializerMethodField()
     updated_by=serializers.SerializerMethodField()
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None
@@ -75,9 +85,10 @@ class SubCategorySerializer(serializers.ModelSerializer):
         brand=Brand.objects.filter(sub_category__name=obj)
         return BrandSerializer(brand,many=True).data
 
-    def get_category(self,obj):
+    def get_category_name(self,obj):
         if obj.category:
             return {
+                "id":obj.category.id,
                 "name":obj.category.name
             }
         return None
@@ -107,12 +118,14 @@ class AttributeSerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.updated_by.username
             }
         return None
@@ -126,12 +139,14 @@ class AttributeValueSerializer(serializers.ModelSerializer):
     def get_created_by(self,obj):
         if obj.created_by:
             return {
+                "id":obj.created_by.id,
                 "username":obj.created_by.username
             }
         return None
     def get_updated_by(self,obj):
         if obj.updated_by:
             return {
+                "id":obj.updated_by.id,
                 "username":obj.updated_by.username
             }
         return None

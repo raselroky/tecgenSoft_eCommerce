@@ -64,8 +64,11 @@ class SubCategoryListCreateAPIView(ListCreateAPIView):
         # Modify request data to include created_by
         data = request.data.copy()  # Create a mutable copy of request.data
         data['created_by'] = request.user.id
-        if SubCategory.objects.filter(name=request.data['name']):
-            return Response({"message":"This name is already exist!"})
+        if SubCategory.objects.filter(name=request.data['name']).exists():
+            return Response({"message":"This name is already exist!"},status=status.HTTP_400_BAD_REQUEST)
+        
+        if 'category' not in data:
+            return Response({"message": "Category must be provided!"}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
