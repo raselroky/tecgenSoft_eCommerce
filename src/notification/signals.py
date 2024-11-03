@@ -7,45 +7,54 @@ from django.conf import settings
 from django.db import transaction
 from user.models import User
 from .models import Notification
+from rest_framework.response import Response
+
 
 def send_notification(user_id, notification_message):
     try:
-        # Retrieve the user by ID, not username
-        user = User.objects.get(id=user_id)
-
-        # Get the channel layer for sending the WebSocket message
+        if isinstance(notification_message, tuple):
+            notification_message = ' '.join(notification_message)
+        
         channel_layer = get_channel_layer()
 
-        # Ensure that the channel layer exists
         if channel_layer is not None:
-            # Send the notification message to the user's group
             async_to_sync(channel_layer.group_send)(
-                f'user_{user.id}',  # Group name is based on user ID
+                f'user_{user_id}', 
                 {
-                    'type': 'notify',  # This corresponds to the 'notify' method in the WebSocket consumer
+                    'type': 'notify',
                     'message': notification_message
                 }
             )
-            return JsonResponse({'status': 'Notification sent','message': notification_message})
+            response_data = {"status": 'Notification sent', "message": notification_message}
+            print('okk,send success')
+            return Response(response_data)
 
-        # If the channel layer is None (WebSockets not properly configured)
-        return JsonResponse({'error': 'Channel layer is not available'}, status=500)
-    
+        return Response({'error': 'Channel layer is not available'}, status=500)
+
     except User.DoesNotExist:
-        return JsonResponse({'error': 'User does not exist'}, status=404)
-
+        return Response({'error': 'User does not exist'}, status=404)
 
 
 
 def create_notification(title,sender,recipients,verb,message):
-    recipients=list(set(recipients))
+    recipients = list(set(recipients))  # Ensure recipients are unique
     
-    if len(recipients)>0:
-        for i in recipients:
-            Notification.objects.create(title=title, sender=sender, recipient=i,verb=verb, message=message)
-            #send_notification(i,message)
+    if recipients:
+        for recipient in recipients:
+            try:
+                send_notification(recipient.id, message)
+                
+                Notification.objects.create(
+                    title=title,
+                    sender=sender,
+                    recipient=recipient,
+                    verb=verb,
+                    message=message
+                )
+            except Exception as e:
+                print(f"Error sending notification to user {recipient.id}: {e}")  # Debugging output
     else:
-        Notification.objects.create(title=title, sender=sender,verb=verb, message=message)
+        print("No recipients to send notification.")
         #send_notification(i,message)
     
 
