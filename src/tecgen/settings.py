@@ -2,7 +2,7 @@
 from pathlib import Path
 import os
 from django.middleware.csrf import CsrfViewMiddleware
-
+from datetime import timedelta
 class WebSocketMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -176,7 +176,6 @@ REST_FRAMEWORK = {
 
 
 
-
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_ALLOW_HEADER = [
     'username',
@@ -200,11 +199,10 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
-CSRF_TRUSTED_ORIGINS=["https://www.tecgensoft.com/"]
-
+CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com/"]
 
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
-SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
+#SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
 
 
 # SECURE_SSL_REDIRECT = True
@@ -236,52 +234,16 @@ SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
 # celery_app.autodiscover_tasks(lambda: INSTALLED_APPS)
 
 
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # Using local memory cache for example
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://{}:6379/1".format('redis'),
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#             "SOCKET_CONNECT_TIMEOUT": 5,
-#             "SOCKET_TIMEOUT": 5,
-#             "IGNORE_EXCEPTIONS": True,
-#             "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
-#             "MASTER_CACHE": f"redis://{'redis'}:6379",
-#             "DB": 4,
-#         },
-#         "KEY_PREFIX": "tecgen",
-#     }
-# }
-# CACHEOPS_REDIS = "redis://{}:6379/1".format('redis')
-
-# CACHEOPS_DEGRADE_ON_FAILURE = True
-# CACHEOPS_ENABLED = True
-
-# CACHEOPS = {
-#     'catalog.Category': {'ops': 'all', 'timeout': 60},
-#     'catalog.SubCategory': {'ops': 'all', 'timeout': 60},
-#     'catalog.Brand': {'ops': 'all', 'timeout': 60},
-   
-# }
-
-# # 5 minutes cache
-# CACHE_MIDDLEWARE_SECONDS = 300
-
-# celery
-# CELERY_BROKER_URL = 'amqp://myuser:mypass@rabbitmq:5672/myvhost'
-# CELERY_RESULT_BACKEND = "redis://{}:6379/".format('redis')
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'UTC'
-# CELERY_TASK_RESULT_EXPIRES = 3600
-# CELERY_TASK_DEFAULT_QUEUE = 'tecgen.celery'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -290,6 +252,11 @@ CHANNEL_LAYERS = {
             "hosts": [('redis', 6379)],
         },
     },
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=24*60*60),  # 24 hours
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Optional: set to fit your logic
 }
 
 AUTH_USER_MODEL = 'user.User'
