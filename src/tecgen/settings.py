@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
     'rest_framework',
-    # 'rest_framework.authtoken',
     'drf_yasg',
     'corsheaders',
     'channels',
@@ -62,7 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    #'whitenoise.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'tecgen.settings.WebSocketMiddleware',
 
 ]
@@ -96,7 +94,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tecgen.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
@@ -104,7 +102,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -136,7 +133,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -153,7 +149,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -163,7 +158,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    ), 
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
@@ -176,21 +172,20 @@ REST_FRAMEWORK = {
 
 
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_ALLOW_HEADER = [
-    'username',
-    'group',
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
-CORS_ALLOW_HEADERS = '*'
+CORS_ALLOW_HEADERS = ["*"]
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -199,10 +194,13 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
-CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com/"]
 
-#SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
-#SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
+
+X_FRAME_OPTIONS = 'ALLOWALL'
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
+CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com"]
+
+
 
 
 # SECURE_SSL_REDIRECT = True
@@ -234,7 +232,6 @@ CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com/"]
 # celery_app.autodiscover_tasks(lambda: INSTALLED_APPS)
 
 
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -254,9 +251,11 @@ CHANNEL_LAYERS = {
     },
 }
 
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=24*60*60),  # 24 hours
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Optional: set to fit your logic
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=24*60*60), 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
 }
+
 
 AUTH_USER_MODEL = 'user.User'
