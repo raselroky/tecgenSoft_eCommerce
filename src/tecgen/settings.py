@@ -213,7 +213,7 @@ CORS_ALLOW_METHODS = [
 ]
 X_FRAME_OPTIONS = 'ALLOWALL'
 XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
-CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com/"]
+CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com"]
 
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
 #SECRET_KEY ='lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3'
