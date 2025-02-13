@@ -62,8 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    #'whitenoise.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
     'tecgen.settings.WebSocketMiddleware',
 
 ]
@@ -164,7 +162,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    ), 
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
@@ -177,20 +176,9 @@ REST_FRAMEWORK = {
 
 
 CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ORIGIN_ALLOW_HEADER = [
-#     'username',
-#     'group',
-#     'accept',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken',
-#     'x-requested-with',
-# ]
+
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -248,7 +236,6 @@ CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com"]
 # celery_app.autodiscover_tasks(lambda: INSTALLED_APPS)
 
 
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -268,9 +255,11 @@ CHANNEL_LAYERS = {
     },
 }
 
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=24*60*60),  # 24 hours
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Optional: set to fit your logic
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=24*60*60), 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
 }
+
 
 AUTH_USER_MODEL = 'user.User'
