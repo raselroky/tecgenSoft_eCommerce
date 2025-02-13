@@ -63,6 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     #'whitenoise.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    
     'tecgen.settings.WebSocketMiddleware',
 
 ]
@@ -175,22 +176,33 @@ REST_FRAMEWORK = {
 }
 
 
-
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_ALLOW_HEADER = [
-    'username',
-    'group',
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ORIGIN_ALLOW_HEADER = [
+#     'username',
+#     'group',
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
-CORS_ALLOW_HEADERS = '*'
+CORS_ALLOW_HEADERS = ["*"]
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -199,6 +211,8 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+X_FRAME_OPTIONS = 'ALLOWALL'
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com/"]
 
 #SECRET_KEY = os.environ.get('SECRET_KEY', 'lb5u2@-7c68-^ssprij!c^d$175cbsisx2&ya*h#%-+4alz^ph3')
