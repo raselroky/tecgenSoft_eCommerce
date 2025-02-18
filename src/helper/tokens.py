@@ -41,7 +41,7 @@ from datetime import timedelta
 def generate_tokens_for_user(user,expiration=None):
     refresh = RefreshToken.for_user(user)
     if expiration:
-        refresh.set_exp(lifetime=timedelta(seconds=expiration))
+        refresh.set_exp(lifetime=timedelta(minutes=expiration))
     return {
         'access': str(refresh.access_token),
         'refresh': str(refresh)

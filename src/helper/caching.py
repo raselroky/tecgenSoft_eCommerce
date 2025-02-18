@@ -1,11 +1,12 @@
 import logging
 from django.core.cache import cache
-
+from datetime import timedelta
 logger = logging.getLogger('django')
 
 def set_cache(key: str, value: str, ttl: int) -> bool:
     try:
-        cache.set(key, value, timeout=ttl)
+        ttl_seconds = timedelta(minutes=ttl).total_seconds()
+        cache.set(key, value, timeout=int(ttl_seconds))
         logger.info(f'Successfully set cache: {key} = {value}')
     except Exception as err:
         logger.error(f'Cannot set cache data: {err}')
