@@ -253,8 +253,10 @@ CHANNEL_LAYERS = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=24*60*60), 
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2), 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
 
