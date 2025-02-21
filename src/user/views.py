@@ -64,7 +64,7 @@ class UserListCreateAPIView(APIView):
             #     }
             if User.objects.filter(username=username).exists():
                 user=User.objects.get(username=username)
-            token=generate_tokens_for_user(user,expiration=2)
+            token=generate_tokens_for_user(user)
             data = {
                 'token': token,
                 'username': user.username,
@@ -119,7 +119,7 @@ class Login(APIView):
             #     'access_token': access_token,
             #     'refresh_token': refresh_token,
             # }
-            token=generate_tokens_for_user(user,expiration=2)
+            token=generate_tokens_for_user(user)
             data = {
                 'token': token,
                 'username': user.username,
