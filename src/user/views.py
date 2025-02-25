@@ -127,7 +127,7 @@ class Login(APIView):
                 }
             
             cache_key = f'{user.username}_token_data'
-            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=2)
+            set_cache(key=cache_key, value=json.dumps(UserTokenSerializer(user).data), ttl=60*24)
            
             cached_data = get_cache(cache_key)
 
