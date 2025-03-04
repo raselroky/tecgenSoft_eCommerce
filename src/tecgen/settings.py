@@ -201,7 +201,7 @@ XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 CORS_ALLOWED_ORIGINS = [
     "https://tecgensoft.vercel.app", 
 ]
-CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com","https://tecgensoft.vercel.app"]
+CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com","https://tecgensoft.vercel.app","http://www.tecgen.com"]
 
 
 
