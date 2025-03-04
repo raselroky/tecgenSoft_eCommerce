@@ -199,7 +199,7 @@ CORS_ALLOW_METHODS = [
 X_FRAME_OPTIONS = 'ALLOWALL'
 XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 
-CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com","http://www.tecgen.com"]
+CSRF_TRUSTED_ORIGINS=["https://www.tecgen.com","http://tecgensoft.com"]
 
 
 
