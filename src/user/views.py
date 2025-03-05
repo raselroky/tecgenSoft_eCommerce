@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveAPIView,RetrieveUpdateDestroyAPIView
-from user.models import UserAddress,User
-from user.serializers import UserSerializer,UserAddressSerializer,UserTokenSerializer
+from user.models import UserAddress,User,Roles,RolePermissions
+from user.serializers import UserSerializer,UserAddressSerializer,UserTokenSerializer,PermissionSerializer2,RolesSerializer,RolePermissionSerializer2,RolePermissionSerializerModify,RolePermissionsSerializer,UsersSerializer2
+from django.contrib.auth.models import Permission
 from rest_framework.views import APIView
 from helper.tokens import create_tokens,generate_tokens_for_user
 from helper.caching import set_cache,get_cache,delete_cache
@@ -25,6 +26,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.filters import SearchFilter, OrderingFilter
+
 
 class UserListCreateAPIView(APIView):
 
@@ -123,7 +126,8 @@ class Login(APIView):
             data = {
                 'token': token,
                 'username': user.username,
-                'email': user.email
+                'email': user.email,
+                "role":user.role
                 }
             
             cache_key = f'{user.username}_token_data'
@@ -142,23 +146,6 @@ class Login(APIView):
 class Logout(APIView):
     permission_classes=(IsAuthenticated,)
 
-    # @swagger_auto_schema(
-    #         request_body=openapi.Schema(
-    #         type=openapi.TYPE_OBJECT,
-    #         properties={
-    #             'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username or contact number of the user'),
-    #         },
-    #         required=['username']
-    #     ),
-    #     responses={
-    #         200: openapi.Response('Successfully logged out', openapi.Schema(
-    #             type=openapi.TYPE_OBJECT,
-    #             properties={
-    #                 'message': openapi.Schema(type=openapi.TYPE_STRING, description='Success message')
-    #             }
-    #         )),
-    #     }
-    # )
     def get(self, request):
         
         user = self.request.user
@@ -256,3 +243,122 @@ class RefreshTokenAPIView(APIView):
         
         except Exception as e:
             return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+class PermissionListAPIView(ListAPIView):
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer2
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['name', 'codename']
+    pagination_class = None
+    
+
+    def get_queryset(self):
+        role_id = self.request.query_params.get('role_id')
+        if role_id:
+            return Permission.objects.filter(roles__id=role_id)
+        return super().get_queryset()
+
+class RoleListCreateAPIView(ListCreateAPIView):
+    permission_classes=(IsAuthenticated,)
+    queryset = Roles.objects.all()
+    serializer_class = RolesSerializer
+    
+class RoleRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    permission_classes=(IsAuthenticated,)
+    queryset = Roles.objects.all()
+    serializer_class = RolesSerializer
+    lookup_field='id'
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"success": True, "message": "Item is deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+
+class RolePermissionsListCreateView(ListCreateAPIView):
+    queryset = RolePermissions.objects.all()
+    serializer_class = RolePermissionSerializer2
+    permission_classes = [IsAuthenticated]  # You can add custom permission classes if needed
+
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+class RolePermissionsListAPIView(ListAPIView):
+    queryset = RolePermissions.objects.all()
+    serializer_class = RolePermissionSerializerModify
+    permission_classes = [IsAuthenticated] 
+
+
+class RolePermissionsRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    queryset = RolePermissions.objects.all()
+    serializer_class = RolePermissionSerializer2
+    permission_classes = [IsAuthenticated]
+    lookup_field='id'
+
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"success": True, "message": "Item is deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+class RolePermissionsSearchCheckAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        
+        id = request.data.get('id') 
+        if not id:
+            return Response({"error": "ID is required."}, status=400)
+
+        checker = RolePermissions.objects.filter(role__id=id).first()
+        if not checker:
+            created_by_user = self.request.user
+            checker = RolePermissions.objects.create(role_id=id,created_by=created_by_user)
+
+        serializer = RolePermissionSerializerModify(checker)
+        return Response(serializer.data, status=200)
+
+class RolesRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    serializer_class = RolesSerializer
+    permission_classes = [IsAuthenticated,]
+    queryset = Roles.objects.all()
+    lookup_field='id'
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"success": True, "message": "Item is deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+class UserGetRetrieve(RetrieveUpdateDestroyAPIView):
+    permission_classes=(IsAuthenticated,)
+    queryset=User.objects.all()
+    serializer_class=UsersSerializer2
+    lookup_field='id'
+
+    def get_queryset(self):
+        user=self.request.user
+        return User.objects.all()
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"success": True, "message": "Item is deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+
+class UserListAPIView(ListAPIView):
+    permission_classes=(IsAuthenticated,)
+    queryset=User.objects.all()
+    serializer_class=UsersSerializer2
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['id','email','first_name','last_name','age','phone','gender','username']
+    
+    def get_queryset(self):
+        return User.objects.all()

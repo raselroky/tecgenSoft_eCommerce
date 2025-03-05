@@ -1,5 +1,5 @@
 from django.urls import path,include
-from user.views import UserListCreateAPIView,Login,Logout,ForgetPassword,RefreshTokenAPIView
+from user.views import *
 
 urlpatterns=[
     path('signup/',UserListCreateAPIView.as_view(),name='user-create-api'),
@@ -10,5 +10,19 @@ urlpatterns=[
     
     #path('refresh-token/',refreshed_token.as_view(),name='refresh-token-users'),
     path('refresh-token/', RefreshTokenAPIView.as_view(), name='token_refresh'),
+
+    path('api/userget/<str:id>', UserGetRetrieve.as_view(), name="user-get"),
+    path('api/user-list/', UserListAPIView.as_view(), name="user-list"),
+    path('role-create/', RoleListCreateAPIView.as_view(), name='role-list-create'),
+    path('role-retrieve-update-destroy/<int:id>',RoleRetrieveUpdateDestroyAPIView.as_view(), name='role-retrieve-update-destroy'),
+
+    path('permission-list/', PermissionListAPIView.as_view(), name='permission-list-api'),
+
+    path('role-permissions/', RolePermissionsListCreateView.as_view(), name='role-permissions-list-create'),
+    path('role-permissions-list/', RolePermissionsListAPIView.as_view(), name='role-permissions-list'),
+    path('role-permissions/<int:id>', RolePermissionsRetrieveUpdateDestroyView.as_view(), name='role-permissions-detail'),
+    path('role-permissions-check/', RolePermissionsSearchCheckAPIView.as_view(), name='role-permissions-check-api'),
+
+    path('role-update-destroy/<int:id>', RolesRetrieveUpdateDestroy.as_view(), name='role-update-destroy-detail'),
 
 ]
