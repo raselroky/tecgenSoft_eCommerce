@@ -11,8 +11,8 @@ urlpatterns=[
     #path('refresh-token/',refreshed_token.as_view(),name='refresh-token-users'),
     path('refresh-token/', RefreshTokenAPIView.as_view(), name='token_refresh'),
 
-    path('api/userget/<str:id>', UserGetRetrieve.as_view(), name="user-get"),
-    path('api/user-list/', UserListAPIView.as_view(), name="user-list"),
+    path('userget/<str:id>', UserGetRetrieve.as_view(), name="user-get"),
+    path('user-list/', UserListAPIView.as_view(), name="user-list"),
     path('role-create/', RoleListCreateAPIView.as_view(), name='role-list-create'),
     path('role-retrieve-update-destroy/<int:id>',RoleRetrieveUpdateDestroyAPIView.as_view(), name='role-retrieve-update-destroy'),
 
