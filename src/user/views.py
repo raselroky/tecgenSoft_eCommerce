@@ -127,7 +127,7 @@ class Login(APIView):
                 'token': token,
                 'username': user.username,
                 'email': user.email,
-                "role":user.role.name
+                "role":[role.title for role in user.role.all()]
                 }
             
             cache_key = f'{user.username}_token_data'
