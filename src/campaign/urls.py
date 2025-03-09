@@ -14,5 +14,4 @@ urlpatterns=[
     path('users-campaign-member-list/',PublicCampaignMemberListAPIView.as_view(),name='users-cmapign-member-list'),
     path('users-dealoftheweek-list/',PublicDealOfTheWeekListAPIView.as_view(),name='users-dealoftheweek-list'),
 
-
 ]
