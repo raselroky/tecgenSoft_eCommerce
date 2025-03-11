@@ -164,3 +164,6 @@ override.tf.json
 
 
 #migrations
+nginx
+/nginx
+/nginx/

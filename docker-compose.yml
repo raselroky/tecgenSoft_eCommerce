@@ -36,9 +36,11 @@ services:
     restart: always
     ports:
       - "80:80"
+     
     volumes:
       - ./src/nginx:/etc/nginx/conf.d
       - ./src/static:/app/src/static
+      - ./src/media:/app/src/media
     depends_on:
       - "app"
 
