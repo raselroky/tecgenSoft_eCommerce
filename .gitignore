@@ -165,5 +165,7 @@ override.tf.json
 
 #migrations
 nginx
+nginx/
 /nginx
 /nginx/
+docker-compose.yml

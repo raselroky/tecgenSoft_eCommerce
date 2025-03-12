@@ -27,7 +27,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_of_birth=models.CharField(max_length=1000,null=True,blank=True)
     role = models.ManyToManyField("Roles", blank=True)
 
-
+    #branch          = models.ForeignKey('branch.Branch', on_delete=models.SET_NULL, null=True,blank=True)
+    
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','date_of_birth']
     objects = UserManager()
